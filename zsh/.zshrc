@@ -82,6 +82,7 @@ plugins=(
   ruby
   kubectl
   autojump
+  gh
 )
 
 source $ZSH/oh-my-zsh.sh
@@ -211,4 +212,4 @@ source /usr/local/etc/bash_completion.d/az
 
 
 # Fig post block. Keep at the bottom of this file.
-. "$HOME/.fig/shell/zshrc.post.zsh"
+# . "$HOME/.fig/shell/zshrc.post.zsh"
