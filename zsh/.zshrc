@@ -82,7 +82,6 @@ plugins=(
   ruby
   kubectl
   autojump
-  gh
 )
 
 source $ZSH/oh-my-zsh.sh
@@ -207,9 +206,5 @@ if [ -f '$HOME/google-cloud-sdk/completion.zsh.inc' ]; then . '$HOME/google-clou
 autoload bashcompinit && bashcompinit
 compinit -i
 source /usr/local/etc/bash_completion.d/az
-
-
-
-
 # Fig post block. Keep at the bottom of this file.
-# . "$HOME/.fig/shell/zshrc.post.zsh"
+. "$HOME/.fig/shell/zshrc.post.zsh"
