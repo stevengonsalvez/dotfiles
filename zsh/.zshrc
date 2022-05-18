@@ -174,6 +174,8 @@ bwc(){
 # ALIASES 
 #---------------------------------------------------------------------------------------------------
 
+alias reload!='. ~/.zshrc'
+
 #alias j="autojump"
 alias vimmy="vim -c 'set mouse=a'"
 alias gst="git status"
@@ -187,7 +189,7 @@ function lazygit() {
 eval $(thefuck --alias)
 
 # All bitwarden
-alias bwgaz="bw list items | jq '.[] | .name' | grep "az-""
+alias bwgaz="bw list items | jq '.[] | .name' | grep"
 alias bwg="bw get item"
 
 #---------------------------------------------------------------------------------------------------
