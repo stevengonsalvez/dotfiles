@@ -1,0 +1,41 @@
+
+[include]
+    path = ~/.gitconfig.local
+[user]
+	name = steven gonsalvez
+	email = steven.gonsalvez@gmail.com
+[http]
+[https]
+[core]
+	excludesfile = /Users/b8886963/.gitignore_global
+	autocrlf = input
+[difftool "sourcetree"]
+	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+	path =
+[mergetool "sourcetree"]
+	cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+	trustExitCode = true
+[merge]
+	tool = diffmerge
+[mergetool "diffmerge"]
+	cmd = diffmerge --merge\n--result=$MERGED $LOCAL $BASE $REMOTE
+	trustExitCode = true
+[mergetool]
+	keepBackup = false
+[filter "lfs"]
+	clean = git-lfs clean %f
+	smudge = git-lfs smudge %f
+	required = true
+[alias]
+	last = log -1 HEAD
+	ac = !git add -A && git commit
+	add-commit = !git add -A && git commit
+	ca = !git add -A && git commit
+[commit]
+	gpgsign = true
+[tag]
+	gpgSign = true
+[gpg]
+	program = /usr/local/bin/gpg
+[url "https://github.com/"]
+	insteadOf = git://github.com/

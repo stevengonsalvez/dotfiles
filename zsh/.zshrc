@@ -167,10 +167,24 @@ bwe(){
   eval $(bw get item $1 | jq -r '.notes')
 }
 
+# Create bw secret note out of an existing .env file
 bwc(){
-  export | awk '{printf "%s\\n", $0}' |  sed 's/"/\\"/g' >/tmp/.env
-  bw get template item | jq --arg a "$(cat /tmp/env)" --arg b "$1" '.type = 2 | .secureNote.type = 0 | .notes = $a | .name = $b' | bw encode | bw create item
+  DEFAULT_FF=".env"
+  FF=${2:-$DEFAULT_FF}
+  #cat ${FF} | awk '{printf "%s\\n", $0}' |  sed 's/"/\\"/g' >/tmp/.env
+  cat ${FF} | awk '{print "export " $0}' >/tmp/.env
+  bw get template item | jq --arg a "$(cat /tmp/.env)" --arg b "$1" '.type = 2 | .secureNote.type = 0 | .notes = $a | .name = $b' | bw encode | bw create item
+  rm /tmp/.env
 }
+
+# Create a bw secret note from an existing terminal session
+bwce(){
+  export | awk '{print "export " $0}' >/tmp/.env
+  bw get template item | jq --arg a "$(cat /tmp/.env)" --arg b "$1" '.type = 2 | .secureNote.type = 0 | .notes = $a | .name = $b' | bw encode | bw create item
+  rm /tmp/.env
+}
+
+
 
 #---------------------------------------------------------------------------------------------------
 # ALIASES 
@@ -195,8 +209,10 @@ alias bwll="bw list items | jq '.[] | .name' | grep"
 alias bwg="bw get item"
 alias bwl="bw list items | jq '.[] | .name'"
 
-#calling to unlock bw session
-bwss
+# custom az
+alias azlogin="az login --service-principal --username $ARM_CLIENT_ID --password $ARM_CLIENT_SECRET --tenant $ARM_TENANT_ID"
+
+
 
 #---------------------------------------------------------------------------------------------------
 # AUTOcdOMPLETES 
@@ -217,6 +233,7 @@ source /usr/local/etc/bash_completion.d/az
 
 ## some executions of predefined functions
 # setting github token
+bwss
 bwe "gh-main-pat"
 
 # Fig post block. Keep at the bottom of this file.
