@@ -152,16 +152,18 @@ source "$(redo alias-file)"
 # Functions 
 #---------------------------------------------------------------------------------------------------
 
+#bw session set
 bwss(){
   eval $(bw unlock | grep export | awk -F"\$" {'print $2'})
 }
 
-
+# bw delete item
 bwdd(){
 	bw delete item $(bw get item $1 | jq .id | tr -d '"')
 }
 
-bws(){
+# set environment from the notes in item
+bwe(){
   eval $(bw get item $1 | jq -r '.notes')
 }
 
@@ -189,8 +191,12 @@ function lazygit() {
 eval $(thefuck --alias)
 
 # All bitwarden
-alias bwgaz="bw list items | jq '.[] | .name' | grep"
+alias bwll="bw list items | jq '.[] | .name' | grep"
 alias bwg="bw get item"
+alias bwl="bw list items | jq '.[] | .name'"
+
+#calling to unlock bw session
+bwss
 
 #---------------------------------------------------------------------------------------------------
 # AUTOcdOMPLETES 
@@ -208,5 +214,10 @@ if [ -f '$HOME/google-cloud-sdk/completion.zsh.inc' ]; then . '$HOME/google-clou
 autoload bashcompinit && bashcompinit
 compinit -i
 source /usr/local/etc/bash_completion.d/az
+
+## some executions of predefined functions
+# setting github token
+bwe "gh-main-pat"
+
 # Fig post block. Keep at the bottom of this file.
 . "$HOME/.fig/shell/zshrc.post.zsh"
