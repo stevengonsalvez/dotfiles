@@ -1,0 +1,62 @@
+# Now managed by chezmoi
+# Fig pre block. Keep at the top of this file.
+. "$HOME/.fig/shell/bash_profile.pre.bash"
+export JAVA_HOME=$(/usr/libexec/java_home)
+if [ -f $(brew --prefix)/etc/bash_completion ]; then
+    . $(brew --prefix)/etc/bash_completion
+  fi
+
+
+source '/Applications/azure/az.completion'
+if which jenv > /dev/null; then eval "$(jenv init -)"; fi
+export GOPATH=~/d/go
+export AWSPATH=/Users/b8886963/Library/Python/3.5/bin
+export PATH=$PATH:$GOPATH/bin/:$AWSPATH
+
+if [ -f ~/.git-completion.bash ]; then
+  . ~/.git-completion.bash
+fi
+
+export CLICOLOR=1
+
+export LSCOLORS=GxFxCxDxBxegedabagaced
+complete -C '/Users/b8886963/Library/Python/3.5/bin/aws_completer' aws
+
+complete -C /usr/local/bin/vault vault
+
+parse_git_branch() {
+    git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
+}
+export PS1="\u@\h \W\[\033[32m\]\$(parse_git_branch)\[\033[00m\] $ "
+
+# Add GitPitch launch alias to your ~/.bashrc
+alias gpd='docker run -it -v $PWD:/repo -p 9000:9000 gitpitch/trial'
+
+alias kdev='export KUBECONFIG=~/d/git/service-whisks/infra/k8s/dev-kubeconfig.yaml;kubectl config set-context dev --namespace=centralservices'
+alias kstage='export KUBECONFIG=~/d/git/service-whisks/infra/k8s/staging-kubeconfig.yaml;kubectl config set-context staging --namespace=centralservices-staging'
+alias kprod='export KUBECONFIG=~/d/git/service-whisks/infra/k8s/prod-kubeconfig.yaml;kubectl config set-context prod --namespace=centralservices'
+alias kperf='export KUBECONFIG=~/d/git/service-whisks/infra/k8s/perf-kubeconfig.yaml;kubectl config set-context perf --namespace=centralservices-centralservices-perf'
+alias kelk='export KUBECONFIG=~/d/git/service-whisks/infra/k8s/elasticsearch-k8s-kubeconfig.yaml;kubectl config set-context elk'
+alias kdevt='export KUBECONFIG=~/d/git/service-whisks/infra/k8s/devt-kubeconfig.yaml;kubectl config set-context devt --namespace=centralservices-tools'
+alias kprodt='export KUBECONFIG=~/d/git/service-whisks/infra/k8s/prodt-kubeconfig.yaml;kubectl config set-context prodt --namespace=centralservices-tools'
+alias kprodbr='export KUBECONFIG=~/.kube/br-kubeconfig.yaml;kubectl config set-context prodbr --namespace=bloomreachmigration-dotcom-prod'
+alias kperfapi='export KUBECONFIG=~/d/git/mydotcom/infra/k8s/api-perf-kubeconfig.yaml;kubectl config set-context perfapi --namespace=api-digitalservices-perf'
+
+alias skdev='ln -s ~/d/git/service-whisks/infra/k8s/dev-kubeconfig.yaml /Users/b8886963/.kube/config'
+alias skstage='ln -s ~/d/git/service-whisks/infra/k8s/staging-kubeconfig.yaml /Users/b8886963/.kube/config'
+alias skprod='ln -s ~/d/git/service-whisks/infra/k8s/prod-kubeconfig.yaml /Users/b8886963/.kube/config'
+alias skperf='ln -s ~/d/git/service-whisks/infra/k8s/perf-kubeconfig.yaml /Users/b8886963/.kube/config'
+alias skelk='ln -s ~/d/git/service-whisks/infra/k8s/elasticsearch-k8s-kubeconfig.yaml /Users/b8886963/.kube/config'
+alias sdevt='ln -s ~/d/git/service-whisks/infra/k8s/devt-kubeconfig.yaml /Users/b8886963/.kube/config'
+alias sprodt='ln -s ~/d/git/service-whisks/infra/k8s/prodt-kubeconfig.yaml /Users/b8886963/.kube/config'
+alias skperfapi='ln -s ~/d/git/mydotcom/infra/k8s/api-perf-kubeconfig.yaml /Users/b8886963/.kube/config'
+
+alias helm2='ln -s /usr/local/bin/helm2 /usr/local/bin/helm'
+alias helm3='ln -s /usr/local/bin/helm3 /usr/local/bin/helm'
+export GITHUB_TOKEN=883d8e5439d020e07f383e286e75fa06dbe918e4
+export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
+export PATH="/Users/b8886963/d/9.1.4.0-IBM-MQ-Toolkit-MacX64/bin:/Users/b8886963/d/9.1.4.0-IBM-MQ-Toolkit-MacX64/samp/bin:$PATH"
+export DYLD_LIBRARY_PATH="/Users/b8886963/d/9.1.4.0-IBM-MQ-Toolkit-MacX64/lib64"
+
+# Fig post block. Keep at the bottom of this file.
+. "$HOME/.fig/shell/bash_profile.post.bash"
