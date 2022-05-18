@@ -23,3 +23,4 @@ Then simply use stow to install the dotfiles you want to use:
     cd ~/.dotfiles
     stow vim
     stow tmux
+    stow .gnupg -t ~/.gnupg
