@@ -152,8 +152,12 @@ source "$(redo alias-file)"
 # Functions 
 #---------------------------------------------------------------------------------------------------
 
+bwss(){
+  eval $(bw unlock | grep export | awk -F"\$" {'print $2'})
+}
 
-bwd(){
+
+bwdd(){
 	bw delete item $(bw get item $1 | jq .id | tr -d '"')
 }
 
@@ -202,5 +206,9 @@ if [ -f '$HOME/google-cloud-sdk/completion.zsh.inc' ]; then . '$HOME/google-clou
 autoload bashcompinit && bashcompinit
 compinit -i
 source /usr/local/etc/bash_completion.d/az
+
+
+
+
 # Fig post block. Keep at the bottom of this file.
 . "$HOME/.fig/shell/zshrc.post.zsh"
