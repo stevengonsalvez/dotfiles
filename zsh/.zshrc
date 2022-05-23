@@ -84,7 +84,12 @@ plugins=(
   autojump
 )
 
+
+# Source dependent stuff
 source $ZSH/oh-my-zsh.sh
+source $HOME/.zsh_aliases
+source $HOME/.zsh_functions
+
 
 # User configuration
 
@@ -149,74 +154,11 @@ source "$(redo alias-file)"
 
 
 #---------------------------------------------------------------------------------------------------
-# Functions 
-#---------------------------------------------------------------------------------------------------
-
-#bw session set
-bwss(){
-  eval $(bw unlock | grep export | awk -F"\$" {'print $2'})
-}
-
-# bw delete item
-bwdd(){
-	bw delete item $(bw get item $1 | jq .id | tr -d '"')
-}
-
-# set environment from the notes in item
-bwe(){
-  eval $(bw get item $1 | jq -r '.notes')
-}
-
-# Create bw secret note out of an existing .env file
-bwc(){
-  DEFAULT_FF=".env"
-  FF=${2:-$DEFAULT_FF}
-  #cat ${FF} | awk '{printf "%s\\n", $0}' |  sed 's/"/\\"/g' >/tmp/.env
-  cat ${FF} | awk '{print "export " $0}' >/tmp/.env
-  bw get template item | jq --arg a "$(cat /tmp/.env)" --arg b "$1" '.type = 2 | .secureNote.type = 0 | .notes = $a | .name = $b' | bw encode | bw create item
-  rm /tmp/.env
-}
-
-# Create a bw secret note from an existing terminal session
-bwce(){
-  export | awk '{print "export " $0}' >/tmp/.env
-  bw get template item | jq --arg a "$(cat /tmp/.env)" --arg b "$1" '.type = 2 | .secureNote.type = 0 | .notes = $a | .name = $b' | bw encode | bw create item
-  rm /tmp/.env
-}
-
-
-
-#---------------------------------------------------------------------------------------------------
-# ALIASES 
-#---------------------------------------------------------------------------------------------------
-
-alias reload!='. ~/.zshrc'
-
-#alias j="autojump"
-alias vimmy="vim -c 'set mouse=a'"
-alias gst="git status"
-alias gview="gh repo view --web"
-git config --global alias.add-commit '!git add -A && git commit'
-function lazygit() {
-    git add .
-    git commit -a -m "$1"
-    git push
-}
-eval $(thefuck --alias)
-
-# All bitwarden
-alias bwll="bw list items | jq '.[] | .name' | grep"
-alias bwg="bw get item"
-alias bwl="bw list items | jq '.[] | .name'"
-
-# custom az
-alias azlogin="az login --service-principal --username $ARM_CLIENT_ID --password $ARM_CLIENT_SECRET --tenant $ARM_TENANT_ID"
-
-
-
-#---------------------------------------------------------------------------------------------------
 # AUTOcdOMPLETES 
 #---------------------------------------------------------------------------------------------------
+# https://github.com/nvbn/thefuck
+eval $(thefuck --alias)
+
 
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f '$HOME/google-cloud-sdk/path.zsh.inc' ]; then . '$HOME/google-cloud-sdk/path.zsh.inc'; fi
@@ -232,7 +174,7 @@ compinit -i
 source /usr/local/etc/bash_completion.d/az
 
 ## some executions of predefined functions
-# setting github token
+# setting github token (depends on .zsh_functions)
 bwss
 bwe "gh-main-pat"
 

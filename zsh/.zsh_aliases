@@ -1,0 +1,24 @@
+#---------------------------------------------------------------------------------------------------
+# ALIASES 
+#---------------------------------------------------------------------------------------------------
+
+alias reload!='. ~/.zshrc'
+
+#alias j="autojump"
+alias vimmy="vim -c 'set mouse=a'"
+alias gst="git status"
+alias gview="gh repo view --web"
+git config --global alias.add-commit '!git add -A && git commit'
+function lazygit() {
+    git add .
+    git commit -a -m "$1"
+    git push
+}
+
+# All bitwarden
+alias bwll="bw list items | jq '.[] | .name' | grep"
+alias bwg="bw get item"
+alias bwl="bw list items | jq '.[] | .name'"
+
+# custom az
+alias azlogin="az login --service-principal --username $ARM_CLIENT_ID --password $ARM_CLIENT_SECRET --tenant $ARM_TENANT_ID"

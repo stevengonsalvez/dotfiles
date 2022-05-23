@@ -1,0 +1,5 @@
+{
+    "yaml.schemas": {
+        "https://json.schemastore.org/taskfile.json": "file:///Users/b8886963/.dotfiles/tasks/init.yml"
+    }
+}

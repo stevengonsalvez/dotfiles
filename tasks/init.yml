@@ -1,0 +1,16 @@
+version: '3'
+
+vars:
+  GIT_COMMIT:
+    sh: git log -n 1 --format=%h
+  HOME: {sh: "echo $HOME"}
+
+env:
+  GREETING: Hey, there!
+
+tasks:
+  az-init:
+    cmds:
+      - source {{.HOME}}/.zsh_functions; bwe {{.S_ENV}}; echo $ARM_CLIENT_ID
+      - export FOO=bar
+    interactive: true
