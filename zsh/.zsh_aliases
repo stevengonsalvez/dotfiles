@@ -21,4 +21,11 @@ alias bwg="bw get item"
 alias bwl="bw list items | jq '.[] | .name'"
 
 # custom az
-alias azlogin="az login --service-principal --username $ARM_CLIENT_ID --password $ARM_CLIENT_SECRET --tenant $ARM_TENANT_ID"
+alias azl="az login --service-principal --username $ARM_CLIENT_ID --password $ARM_CLIENT_SECRET --tenant $ARM_TENANT_ID"
+alias azs="az account show"
+
+# custom tf
+
+alias tfa="terraform apply"
+alias tfaa="terraform apply -auto-approve"
+alias tfp="terraform plan"

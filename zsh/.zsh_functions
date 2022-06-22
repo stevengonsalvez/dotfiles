@@ -22,9 +22,9 @@ bwc(){
   DEFAULT_FF=".env"
   FF=${2:-$DEFAULT_FF}
   #cat ${FF} | awk '{printf "%s\\n", $0}' |  sed 's/"/\\"/g' >/tmp/.env
-  cat ${FF} | awk '{print "export " $0}' >/tmp/.env
-  bw get template item | jq --arg a "$(cat /tmp/.env)" --arg b "$1" '.type = 2 | .secureNote.type = 0 | .notes = $a | .name = $b' | bw encode | bw create item
-  rm /tmp/.env
+  cat ${FF} | awk '{print "export " $0}' >/tmp/.xenv
+  bw get template item | jq --arg a "$(cat /tmp/.xenv)" --arg b "$1" '.type = 2 | .secureNote.type = 0 | .notes = $a | .name = $b' | bw encode | bw create item
+  rm /tmp/.xenv
 }
 
 # Create a bw secret note from an existing terminal session
@@ -37,4 +37,13 @@ bwce(){
 ## Netstat to list all listening ports
 macnst (){
     netstat -Watnlv | grep LISTEN | awk '{"ps -o comm= -p " $9 | getline procname;colred="\033[01;31m";colclr="\033[0m"; print colred "proto: " colclr $1 colred " | addr.port: " colclr $4 colred " | pid: " colclr $9 colred " | name: " colclr procname;  }' | column -t -s "|"
+}
+
+
+## Unset all ARM
+uaz(){
+unset ARM_CLIENT_ID
+unset ARM_CLIENT_SECRET
+unset ARM_SUBSCRIPTION_ID
+unset ARM_TENANT_ID
 }
