@@ -158,7 +158,9 @@ gpgconf --launch gpg-agent
 # pyenv
 export PATH=$(pyenv root)/shims:$PATH
 
-
+## terraform
+export TF_CLI_ARGS_plan="-compact-warnings"
+export TF_CLI_ARGS_apply="-compact-warnings"
 
 #---------------------------------------------------------------------------------------------------
 # AUTOcdOMPLETES 
