@@ -141,8 +141,10 @@ export PATH="/usr/local/opt/openjdk@17/bin:$PATH"
 #---------------------------------------------------------------------------------------------------
 
 # GOLANG
-export GOPATH=~/d/go
-export PATH=$PATH:$GOPATH
+# [[ -s "/Users/stevengonsalvez/.gvm/scripts/gvm" ]] && source "/Users/stevengonsalvez/.gvm/scripts/gvm"
+export GOPATH=$HOME/go
+export GOBIN=$GOPATH/bin
+export PATH=$PATH:$GOPATH:$GOBIN
 export GPG_TTY=$(tty)
 gpgconf --launch gpg-agent
 
@@ -200,5 +202,9 @@ source ~/.sdkman/bin/sdkman-init.sh
 export SDKMAN_DIR="$HOME/.sdkman"
 [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
 
+
+
+
 # Fig post block. Keep at the bottom of this file.
 [[ -f "$HOME/.fig/shell/zshrc.post.zsh" ]] && builtin source "$HOME/.fig/shell/zshrc.post.zsh"
+

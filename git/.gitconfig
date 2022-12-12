@@ -1,9 +1,9 @@
-
 [include]
     path = ~/.gitconfig.local
 [user]
 	name = steven gonsalvez
 	email = steven.gonsalvez@gmail.com
+	signingkey = CD2DD30EB030C243
 [http]
 [https]
 [core]
@@ -31,11 +31,16 @@
 	ac = !git add -A && git commit
 	add-commit = !git add -A && git commit
 	ca = !git add -A && git commit
+        ahead-of-master = log --oneline origin/master..HEAD
+        fetch-pull-requests = fetch origin '+refs/pull/*/head:refs/remotes/origin/pull/*'
+        roots = log --all --oneline --decorate --max-parents=0
+        unpushed = log @{u}..
+        work-in-progress = rebase -i @{u}
 [commit]
 	gpgsign = true
 [tag]
 	gpgSign = true
 [gpg]
-	program = /usr/local/bin/gpg
+	program = gpg
 [url "https://github.com/"]
-	insteadOf = git://github.com/
+	insteadOf = git://github.com/%
