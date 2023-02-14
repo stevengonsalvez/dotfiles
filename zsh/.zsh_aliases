@@ -46,3 +46,6 @@ alias azkc="az aks get-credentials"
 
 # golang
 alias go=richgo
+
+# openai
+alias aic="aicommits"
