@@ -26,8 +26,23 @@ alias azl="az login --service-principal --username $ARM_CLIENT_ID --password $AR
 alias azs="az account show"
 
 # custom tf
-
+alias tf="terraform"
 alias tfa="terraform apply"
 alias tfaa="terraform apply -auto-approve"
 alias tfp="terraform plan"
 alias intj="open -na \"IntelliJ IDEA.app\" --args"
+
+## kubernetes
+alias k="kubectl"
+alias kc="kubecm"
+alias kn="kubens"
+alias kx="kubectx"
+
+
+# azure
+## aks
+alias azk="az aks"
+alias azkc="az aks get-credentials"
+
+# golang
+alias go=richgo

@@ -89,6 +89,7 @@ plugins=(
   ruby
   kubectl
   autojump
+  kube-ps1
 )
 
 # homebrew path
@@ -146,6 +147,8 @@ export GOPATH=$HOME/go
 export GOBIN=$GOPATH/bin
 export PATH=$PATH:$GOPATH:$GOBIN
 export GPG_TTY=$(tty)
+#export GO111MODULE=off
+
 gpgconf --launch gpg-agent
 
 

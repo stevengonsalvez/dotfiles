@@ -27,3 +27,21 @@ Then simply use stow to install the dotfiles you want to use:
 
 ##### ZSH
 - uses powerlevel10k
+
+## For npm global packages
+#### Export
+`npm list --global --parseable --depth=0 | sed '1d' | awk '{gsub(/\/.*\//,"",$1); print}' > path/to/npmfile`
+
+#### Import
+`xargs npm install --global < path/to/npmfile`
+
+>current list
+```
+aicommits
+corepack
+delete-workflow-runs
+dockerlint
+http-server
+json-log-viewer
+npm
+```
