@@ -49,3 +49,4 @@ alias go=richgo
 
 # openai
 alias aic="aicommits"
+alias boo="python3 ~/oa.py"
