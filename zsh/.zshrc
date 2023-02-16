@@ -166,6 +166,13 @@ export PATH=$(pyenv root)/shims:$PATH
 export TF_CLI_ARGS_plan="-compact-warnings"
 export TF_CLI_ARGS_apply="-compact-warnings"
 
+## Cheatsheet
+PATH_DIR="$HOME/cht"  # or another directory on your $PATH
+mkdir -p "$PATH_DIR"
+curl -s https://cht.sh/:cht.sh > $PATH_DIR/cht.sh
+chmod +x $PATH_DIR/cht.sh
+export PATH=$PATH:$PATH_DIR
+
 #---------------------------------------------------------------------------------------------------
 # AUTOcdOMPLETES 
 #---------------------------------------------------------------------------------------------------
