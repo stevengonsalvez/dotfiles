@@ -30,7 +30,10 @@ alias tf="terraform"
 alias tfa="terraform apply"
 alias tfaa="terraform apply -auto-approve"
 alias tfp="terraform plan"
+
+# IDE
 alias intj="open -na \"IntelliJ IDEA.app\" --args"
+alias charm="open -na \"PyCharm CE.app\" --args"
 
 ## kubernetes
 alias k="kubectl"
@@ -50,3 +53,8 @@ alias go=richgo
 # openai
 alias aic="aicommits"
 alias boo="python3 ~/oa.py"
+
+# poetry
+alias po="poetry"
+alias poi="poetry install"
+alias por="poetry run"
