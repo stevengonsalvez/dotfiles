@@ -3,7 +3,7 @@
 #---------------------------------------------------------------------------------------------------
 
 alias reload!='. ~/.zshrc'
-alias docker="podman"
+#alias docker="podman"
 
 #alias j="autojump"
 alias vimmy="vim -c 'set mouse=a'"
