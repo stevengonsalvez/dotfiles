@@ -58,3 +58,5 @@ alias boo="python3 ~/oa.py"
 alias po="poetry"
 alias poi="poetry install"
 alias por="poetry run"
+
+

@@ -200,6 +200,9 @@ source ~/.sdkman/bin/sdkman-init.sh
 ## some executions of predefined functions
 # setting github token (depends on .zsh_functions)
 
+## copilot cli
+eval "$(github-copilot-cli alias -- "$0")"
+
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
