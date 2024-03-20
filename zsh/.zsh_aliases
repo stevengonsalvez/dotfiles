@@ -60,3 +60,6 @@ alias poi="poetry install"
 alias por="poetry run"
 
 
+# huggingface
+alias hf="huggingface-cli"
+
