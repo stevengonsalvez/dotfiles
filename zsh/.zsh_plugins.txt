@@ -1,0 +1,3 @@
+# .zsh_plugins.txt for antidote
+
+romkatv/powerlevel10k kind:fpath

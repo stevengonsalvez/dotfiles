@@ -13,6 +13,17 @@ fi
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
 
+# sourcing antigen  
+# source $HOMEBREW_PREFIX/share/antigen/antigen.zsh
+# antigen init ~/.antigenrc
+# antigen apply
+# rm ~/.antigen/init.zsh
+
+# # sourcing antidote
+# source $(brew --prefix)/opt/antidote/share/antidote/antidote.zsh
+
+# # initialize plugins statically with ${ZDOTDIR:-~}/.zsh_plugins.txt
+# antidote load
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
@@ -79,6 +90,7 @@ export ZSH="$HOME/.oh-my-zsh"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 #plugins=(git)
+
 plugins=(
   git
   bundler
@@ -91,6 +103,13 @@ plugins=(
   autojump
   kube-ps1
 )
+
+# activate powerlevel10k
+source $(brew --prefix)/share/powerlevel10k/powerlevel10k.zsh-theme
+
+
+# autojump
+[[ -s `brew --prefix`/etc/autojump.sh ]] && . `brew --prefix`/etc/autojump.sh
 
 # homebrew path
 export PATH=/opt/homebrew/bin:/opt/homebrew/sbin:$PATH
@@ -173,11 +192,11 @@ curl -s https://cht.sh/:cht.sh > $PATH_DIR/cht.sh
 chmod +x $PATH_DIR/cht.sh
 export PATH=$PATH:$PATH_DIR
 
-#---------------------------------------------------------------------------------------------------
-# AUTOcdOMPLETES 
-#---------------------------------------------------------------------------------------------------
-# https://github.com/nvbn/thefuck
-eval $(thefuck --alias)
+# #---------------------------------------------------------------------------------------------------
+# # AUTOcdOMPLETES 
+# #---------------------------------------------------------------------------------------------------
+# # https://github.com/nvbn/thefuck
+# eval $(thefuck --alias)
 
 
 # The next line updates PATH for the Google Cloud SDK.

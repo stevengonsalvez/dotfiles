@@ -1,0 +1,31 @@
+# Load the oh-my-zsh's library.  
+antigen use oh-my-zsh  
+
+# Bundles from the default repo (robbyrussell's oh-my-zsh).   
+antigen bundle git  
+antigen bundle pip  
+antigen bundle command-not-found
+antigen bundle docker
+# use the j autojump directory function
+antigen bundle autojump
+antigen bundle git-flow
+antigen bundle bundler
+antigen bundle dotenv
+antigen bundle macos
+antigen bundle rake
+antigen bundle rbenv
+antigen bundle ruby
+antigen bundle kubectl
+antigen bundle autojump
+antigen bundle kube-ps1
+antigen bundle tysonwolker/iterm-tab-colors
+
+
+# a plugin to remind me that I set up an alias for that command!
+antigen bundle djui/alias-tips
+
+# Load the theme.
+antigen theme romkatv/powerlevel10k
+§§
+# Tell Antigen that you're done.
+antigen apply

@@ -5,7 +5,7 @@
 alias reload!='. ~/.zshrc'
 #alias docker="podman"
 
-#alias j="autojump"
+# alias j="autojump"
 alias vimmy="vim -c 'set mouse=a'"
 alias gst="git status"
 alias gview="gh repo view --web"

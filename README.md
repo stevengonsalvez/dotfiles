@@ -72,3 +72,15 @@ tqdm==4.64.1
 urllib3==1.26.14
 yarl==1.8.2
 ```
+
+## for powerlevel10k
+
+install fonts
+
+```
+git clone https://github.com/powerline/fonts.git --depth=1
+cd fonts
+./install.sh
+cd ..
+rm -rf fonts
+```
