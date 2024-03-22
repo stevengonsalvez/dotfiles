@@ -102,14 +102,16 @@ plugins=(
   kubectl
   autojump
   kube-ps1
+  iterm-tab-color
 )
-
 # activate powerlevel10k
 source $(brew --prefix)/share/powerlevel10k/powerlevel10k.zsh-theme
-
-
 # autojump
 [[ -s `brew --prefix`/etc/autojump.sh ]] && . `brew --prefix`/etc/autojump.sh
+
+# fallback source of git plugin
+
+source ~/.oh-my-zsh/plugins/git/git.plugin.zsh
 
 # homebrew path
 export PATH=/opt/homebrew/bin:/opt/homebrew/sbin:$PATH
@@ -118,6 +120,7 @@ export PATH=/opt/homebrew/bin:/opt/homebrew/sbin:$PATH
 # source $ZSH/oh-my-zsh.sh
 source $HOME/.zsh_aliases
 source $HOME/.zsh_functions
+
 
 
 # User configuration

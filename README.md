@@ -84,3 +84,10 @@ cd fonts
 cd ..
 rm -rf fonts
 ```
+
+## iterm tab color
+
+```
+cd ~/.oh-my-zsh/custom/plugins
+git clone https://github.com/bernardop/iterm-tab-color-oh-my-zsh.git iterm-tab-color
+```
