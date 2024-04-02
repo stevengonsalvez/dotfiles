@@ -1,8 +1,11 @@
+
 # CodeWhisperer pre block. Keep at the top of this file.
 [[ -f "${HOME}/Library/Application Support/codewhisperer/shell/zshrc.pre.zsh" ]] && builtin source "${HOME}/Library/Application Support/codewhisperer/shell/zshrc.pre.zsh"
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
+
+
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
@@ -10,8 +13,15 @@ fi
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
+
+export ZSH_DISABLE_COMPFIX=true
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
+
+# using zplug to manage plugins
+export ZPLUG_HOME=$HOMEBREW_PREFIX/opt/zplug
+source $ZPLUG_HOME/init.zsh
+
 
 # sourcing antigen  
 # source $HOMEBREW_PREFIX/share/antigen/antigen.zsh
@@ -89,29 +99,23 @@ export ZSH="$HOME/.oh-my-zsh"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-#plugins=(git)
+# plugins=(git)
+zplug "plugins/git",   from:oh-my-zsh
+# zplug "bernardop/iterm-tab-color-oh-my-zsh"
+zplug tysonwolker/iterm-tab-colors
+zplug "plugins/dotenv", from:oh-my-zsh
+zplug "djui/alias-tips"
+zplug "zsh-users/zsh-syntax-highlighting"
 
-plugins=(
-  git
-  bundler
-  dotenv
-  macos
-  rake
-  rbenv
-  ruby
-  kubectl
-  autojump
-  kube-ps1
-  iterm-tab-color
-)
+
 # activate powerlevel10k
 source $(brew --prefix)/share/powerlevel10k/powerlevel10k.zsh-theme
 # autojump
 [[ -s `brew --prefix`/etc/autojump.sh ]] && . `brew --prefix`/etc/autojump.sh
 
-# fallback source of git plugin
+# fallback source of git plugin 
+# source ~/.oh-my-zsh/plugins/git/git.plugin.zsh
 
-source ~/.oh-my-zsh/plugins/git/git.plugin.zsh
 
 # homebrew path
 export PATH=/opt/homebrew/bin:/opt/homebrew/sbin:$PATH
@@ -259,6 +263,20 @@ else
 fi
 unset __conda_setup
 # <<< conda initialize <<<
+
+# Install plugins if there are plugins that have not been installed
+# if ! zplug check --verbose; then
+#     printf "Install? [y/N]: "
+#     if read -q; then
+#         echo; zplug install
+#     fi
+# fi
+zplug install
+
+# Then, source plugins and add commands to $PATH
+zplug load #--verbose
+
+echo " ------------------------------READY --------------------------------- "
 
 # CodeWhisperer post block. Keep at the bottom of this file.
 [[ -f "${HOME}/Library/Application Support/codewhisperer/shell/zshrc.post.zsh" ]] && builtin source "${HOME}/Library/Application Support/codewhisperer/shell/zshrc.post.zsh"
