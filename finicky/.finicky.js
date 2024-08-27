@@ -43,7 +43,57 @@ module.exports = {
       },
       {
         // Open any url that includes the string "workplace" in safari
+        match: /pages-gitlab/,
+        browser: "Safari"
+      },
+      {
+        // Open any url that includes the string "workplace" in safari
+        match: /adobe/,
+        browser: "Safari"
+      },
+      {
+        // Open any url that includes the string "workplace" in safari
+        match: /hr.bt/,
+        browser: "Safari"
+      },
+      {
+        // Open any url that includes the string "workplace" in safari
+        match: /slack/,
+        browser: "Safari"
+      },
+      {
+        // Open any url that includes the string "workplace" in safari
         match: /mural/,
+        browser: "Safari"
+      },
+      {
+        // Open any url that includes the string "workplace" in safari
+        match: /btgroupcloud/,
+        browser: "Safari"
+      },
+      {
+        // Open any url that includes the string "workplace" in safari
+        match: /performancemanager/,
+        browser: "Safari"
+      },
+      {
+        // Open any url that includes the string "workplace" in safari
+        match: /btkanoprd/,
+        browser: "Safari"
+      },
+      {
+        // Open any url that includes the string "workplace" in safari
+        match: /concursolutions/,
+        browser: "Safari"
+      },
+      {
+        // Open any url that includes the string "workplace" in safari
+        match: /MyContractor/,
+        browser: "Safari"
+      },
+      {
+        // Open any url that includes the string "workplace" in safari
+        match: /office4/,
         browser: "Safari"
       },
       {
