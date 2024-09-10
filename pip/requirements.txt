@@ -37,7 +37,7 @@ keyring==23.13.1
 lockfile==0.12.2
 MarkupSafe==2.1.2
 more-itertools==9.1.0
-msgpack==1.0.4
+msgpack==1.1.0
 multidict==6.0.4
 mypy-extensions==1.0.0
 numpy==1.24.2
