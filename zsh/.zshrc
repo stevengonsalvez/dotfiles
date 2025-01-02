@@ -187,6 +187,10 @@ gpgconf --launch gpg-agent
 # pyenv
 export PATH=$(pyenv root)/shims:$PATH
 
+# Node
+export  NODE_OPTIONS="--no-deprecation"
+
+
 ## terraform
 export TF_CLI_ARGS_plan="-compact-warnings"
 export TF_CLI_ARGS_apply="-compact-warnings"
@@ -279,3 +283,6 @@ echo " ------------------------------READY --------------------------------- "
 
 # Q post block. Keep at the bottom of this file.
 [[ -f "${HOME}/Library/Application Support/amazon-q/shell/zshrc.post.zsh" ]] && builtin source "${HOME}/Library/Application Support/amazon-q/shell/zshrc.post.zsh"
+
+# Added by Windsurf
+export PATH="/Users/stevengonsalvez/.codeium/windsurf/bin:$PATH"
