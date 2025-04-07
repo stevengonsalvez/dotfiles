@@ -1,5 +1,5 @@
 module.exports = {
-    defaultBrowser: "Google Chrome",
+    defaultBrowser: "Arc",
     // rewrite: [
     //   {
     //     // Redirect all urls to use https
@@ -93,7 +93,17 @@ module.exports = {
       },
       {
         // Open any url that includes the string "workplace" in safari
+        match: /login.microsoft/,
+        browser: "Safari"
+      },
+      {
+        // Open any url that includes the string "workplace" in safari
         match: /office4/,
+        browser: "Safari"
+      },
+      {
+        // Open any url that includes the string "workplace" in safari
+        match: /btgroupcloud/,
         browser: "Safari"
       },
       {
