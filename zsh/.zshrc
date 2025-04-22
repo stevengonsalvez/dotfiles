@@ -244,7 +244,7 @@ source ~/.sdkman/bin/sdkman-init.sh
 # setting github token (depends on .zsh_functions)
 
 ## copilot cli
-eval "$(github-copilot-cli alias -- "$0")"
+eval "$(gh copilot alias -- zsh)"
 
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
@@ -301,3 +301,4 @@ export PATH="/Users/stevengonsalvez/.codeium/windsurf/bin:$PATH"
 
 # Amazon Q post block. Keep at the bottom of this file.
 [[ -f "${HOME}/Library/Application Support/amazon-q/shell/zshrc.post.zsh" ]] && builtin source "${HOME}/Library/Application Support/amazon-q/shell/zshrc.post.zsh"
+eval "$(mise activate zsh)"

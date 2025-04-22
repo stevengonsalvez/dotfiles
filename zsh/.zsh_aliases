@@ -64,6 +64,11 @@ alias por="poetry run"
 alias hf="huggingface-cli"
 
 # system
-alias szsc="open -a /Applications/Zscaler/Zscaler.app --hide; sudo find /Library/LaunchDaemons -name '*zscaler*' -exec launchctl load {} \;"
+alias szsc="open -a /Applications/Zscaler/Zscaler.app --hide; sudo find /Library/LaunchDaemons -name '*zscaler*' -exec sudo launchctl load {} \;"
 alias kzsc="find /Library/LaunchAgents -name '*zscaler*' -exec launchctl unload {} \;;sudo find /Library/LaunchDaemons -name '*zscaler*' -exec launchctl unload {} \;"
 
+# github copilot cli
+alias '??'='gh copilot suggest -t shell'
+alias 'git?'='gh copilot suggest -t git'
+alias 'exp?'='gh copilot explain'
+alias 'ghc'='gh copilot'
