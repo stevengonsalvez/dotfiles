@@ -86,7 +86,7 @@ trove-classifiers==2023.2.20
 typing_extensions==4.5.0
 uritemplate==4.1.1
 urllib3==1.26.18
-virtualenv==20.20.0
+virtualenv==20.26.6
 webencodings==0.5.1
 websocket-client==1.5.1
 xattr==0.10.1
