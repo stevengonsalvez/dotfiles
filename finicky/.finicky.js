@@ -103,6 +103,11 @@ module.exports = {
       },
       {
         // Open any url that includes the string "workplace" in safari
+        match: /figma/,
+        browser: "Safari"
+      },
+      {
+        // Open any url that includes the string "workplace" in safari
         match: /btgroupcloud/,
         browser: "Safari"
       },

@@ -253,10 +253,15 @@ eval "$(gh copilot alias -- zsh)"
 # Not waiting 
 # bwss
 # bwe "gh-main-pat"
+# For amazon q
+export EDITOR=code
 
 ### for flutter
 export PATH=$HOME/.gem/bin:$PATH
 export PATH=$PATH:~/d/flutter/flutter/bin
+
+### for android
+export PATH=$PATH:$HOME/Library/Android/sdk/platform-tools;$HOME/Library/Android/sdk/tools/bin
 
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
 export SDKMAN_DIR="$HOME/.sdkman"
@@ -299,6 +304,7 @@ echo " ------------------------------READY --------------------------------- "
 # Added by Windsurf
 export PATH="/Users/stevengonsalvez/.codeium/windsurf/bin:$PATH"
 
+eval "$(mise activate zsh)"
+
 # Amazon Q post block. Keep at the bottom of this file.
 [[ -f "${HOME}/Library/Application Support/amazon-q/shell/zshrc.post.zsh" ]] && builtin source "${HOME}/Library/Application Support/amazon-q/shell/zshrc.post.zsh"
-eval "$(mise activate zsh)"
