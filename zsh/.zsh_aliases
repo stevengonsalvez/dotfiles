@@ -5,10 +5,27 @@
 alias reload!='. ~/.zshrc'
 #alias docker="podman"
 alias ll="ls -ltr"
+alias la="ls -la"
+alias l="ls -CF"
+alias tree="ls -R | grep ":$" | sed -e 's/:$//' -e 's/[^-][^/]*//--/g' -e 's/^/   /' -e 's/-/|/'"
 # alias j="autojump"
 alias vimmy="vim -c 'set mouse=a'"
+alias v="vim"
+alias nv="nvim"
+# Git shortcuts
 alias gst="git status"
+alias gco="git checkout"
+alias gcm="git commit -m"
+alias gp="git push"
+alias gpu="git pull"
+alias gd="git diff"
+alias gds="git diff --staged"
+alias gb="git branch"
+alias gba="git branch -a"
+alias gl="git log --oneline --graph --decorate"
 alias gview="gh repo view --web"
+alias gpr="gh pr create"
+alias gprs="gh pr list"
 git config --global alias.add-commit '!git add -A && git commit'
 function lazygit() {
     git add .
@@ -34,6 +51,8 @@ alias tfp="terraform plan"
 # IDE
 alias intj="open -na \"IntelliJ IDEA.app\" --args"
 alias charm="open -na \"PyCharm CE.app\" --args"
+alias code="open -a 'Visual Studio Code'"
+alias cursor="open -a 'Cursor'"
 
 ## kubernetes
 alias k="kubectl"
@@ -48,7 +67,7 @@ alias azk="az aks"
 alias azkc="az aks get-credentials"
 
 # golang
-alias go=richgo
+#alias go=richgo
 
 # openai
 alias aic="aicommits"
@@ -62,6 +81,40 @@ alias por="poetry run"
 
 # huggingface
 alias hf="huggingface-cli"
+
+# Docker shortcuts
+alias d="docker"
+alias dc="docker-compose"
+alias dps="docker ps"
+alias dpsa="docker ps -a"
+alias dex="docker exec -it"
+alias dlog="docker logs -f"
+alias drm="docker rm"
+alias drmi="docker rmi"
+
+# System shortcuts
+alias ports="lsof -i -P | grep LISTEN"
+alias myip="curl -s ifconfig.me"
+alias localip="ipconfig getifaddr en0"
+alias flushdns="sudo dscacheutil -flushcache"
+alias ..="cd .."
+alias ...="cd ../.."
+alias ....="cd ../../.."
+alias ~="cd ~"
+alias c="clear"
+alias h="history"
+alias path='echo -e ${PATH//:/\\n}'
+
+# File operations
+alias cp="cp -iv"
+alias mv="mv -iv"
+alias rm="rm -i"
+alias mkdir="mkdir -pv"
+
+# Search shortcuts
+alias f="find . -name"
+alias grep="grep --color=auto"
+alias rg="rg --smart-case"
 
 # system
 alias szsc="open -a /Applications/Zscaler/Zscaler.app --hide; sudo find /Library/LaunchDaemons -name '*zscaler*' -exec sudo launchctl load {} \;"

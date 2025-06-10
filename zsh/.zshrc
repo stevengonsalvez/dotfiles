@@ -1,211 +1,123 @@
-# Amazon Q pre block. Keep at the top of this file.
+# ABOUTME: Main zsh configuration file - optimized for performance
+# Sets up environment, paths, plugins, and sources other config files
+
+# ========================================
+# INSTANT PROMPT (Must be at the very top)
+# ========================================
+# Amazon Q pre block
 [[ -f "${HOME}/Library/Application Support/amazon-q/shell/zshrc.pre.zsh" ]] && builtin source "${HOME}/Library/Application Support/amazon-q/shell/zshrc.pre.zsh"
-# Q pre block. Keep at the top of this file.
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block; everything else may go below.
 
-export PATH=/opt/homebrew/bin:/opt/homebrew/sbin:$PATH
-
-# for using appropriate coloring in iterm
-TERM=xterm-256color
-# colors for ls
-export PS1="\[\033[36m\]\u\[\033[m\]@\[\033[32m\]\h:\[\033[33;1m\]\w\[\033[m\]\$ "
-export CLICOLOR=1
-export LSCOLORS=ExFxBxDxCxegedabagacad
-alias ls='ls -GFh'
-
-
-
+# Enable Powerlevel10k instant prompt
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-# If you come from bash you might have to change your $PATH.
-# export PATH=$HOME/bin:/usr/local/bin:$PATH
+# ========================================
+# ENVIRONMENT VARIABLES
+# ========================================
+# Terminal settings
+export TERM=xterm-256color
+export CLICOLOR=1
+export LSCOLORS=ExFxBxDxCxegedabagacad
+export GPG_TTY=$(tty)
 
-
+# Oh-my-zsh settings
 export ZSH_DISABLE_COMPFIX=true
-# Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
 
-# using zplug to manage plugins
-
+# Homebrew
 export HOMEBREW_PREFIX=$(brew --prefix)
-export ZPLUG_HOME=$HOMEBREW_PREFIX/opt/zplug
-source $ZPLUG_HOME/init.zsh
 
-
-# sourcing antigen  
-# source $HOMEBREW_PREFIX/share/antigen/antigen.zsh
-# antigen init ~/.antigenrc
-# antigen apply
-# rm ~/.antigen/init.zsh
-
-# # sourcing antidote
-# source $(brew --prefix)/opt/antidote/share/antidote/antidote.zsh
-
-# # initialize plugins statically with ${ZDOTDIR:-~}/.zsh_plugins.txt
-# antidote load
-
-# Set name of the theme to load --- if set to "random", it will
-# load a random theme each time oh-my-zsh is loaded, in which case,
-# to know which specific one was loaded, run: echo $RANDOM_THEME
-# See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
-# ZSH_THEME="myagnoster"
-
-# Set list of themes to pick from when loading at random
-# Setting this variable when ZSH_THEME=random will cause zsh to load
-# a theme from this variable instead of looking in ~/.oh-my-zsh/themes/
-# If set to an empty array, this variable will have no effect.
-# ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
-
-# Uncomment the following line to use case-sensitive completion.
-# CASE_SENSITIVE="true"
-
-# Uncomment the following line to use hyphen-insensitive completion.
-# Case-sensitive completion must be off. _ and - will be interchangeable.
-# HYPHEN_INSENSITIVE="true"
-
-# Uncomment the following line to disable bi-weekly auto-update checks.
-# DISABLE_AUTO_UPDATE="true"
-
-# Uncomment the following line to automatically update without prompting.
-# DISABLE_UPDATE_PROMPT="true"
-
-# Uncomment the following line to change how often to auto-update (in days).
-# export UPDATE_ZSH_DAYS=13
-
-# Uncomment the following line if pasting URLs and other text is messed up.
-# DISABLE_MAGIC_FUNCTIONS=true
-
-# Uncomment the following line to disable colors in ls.
-# DISABLE_LS_COLORS="true"
-
-# Uncomment the following line to disable auto-setting terminal title.
-# DISABLE_AUTO_TITLE="true"
-
-# Uncomment the following line to enable command auto-correction.
-# ENABLE_CORRECTION="true"
-
-# Uncomment the following line to display red dots whilst waiting for completion.
-# COMPLETION_WAITING_DOTS="true"
-
-# Uncomment the following line if you want to disable marking untracked files
-# under VCS as dirty. This makes repository status check for large repositories
-# much, much faster.
-# DISABLE_UNTRACKED_FILES_DIRTY="true"
-
-# Uncomment the following line if you want to change the command execution time
-# stamp shown in the history command output.
-# You can set one of the optional three formats:
-# "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
-# or set a custom format using the strftime function format specifications,
-# see 'man strftime' for details.
-# HIST_STAMPS="mm/dd/yyyy"
-
-# Would you like to use another custom folder than $ZSH/custom?
-# ZSH_CUSTOM=/path/to/new-custom-folder
-
-# Which plugins would you like to load?
-# Standard plugins can be found in ~/.oh-my-zsh/plugins/*
-# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
-# Example format: plugins=(rails git textmate ruby lighthouse)
-# Add wisely, as too many plugins slow down shell startup.
-# plugins=(git)
-zplug "plugins/git",   from:oh-my-zsh
-# zplug "bernardop/iterm-tab-color-oh-my-zsh"
-zplug tysonwolker/iterm-tab-colors
-zplug "plugins/dotenv", from:oh-my-zsh
-zplug "djui/alias-tips"
-zplug "zsh-users/zsh-syntax-highlighting"
-
-
-# activate powerlevel10k
-source $(brew --prefix)/share/powerlevel10k/powerlevel10k.zsh-theme
-# autojump
-[[ -s `brew --prefix`/etc/autojump.sh ]] && . `brew --prefix`/etc/autojump.sh
-
-# fallback source of git plugin 
-# source ~/.oh-my-zsh/plugins/git/git.plugin.zsh
-
-
-# homebrew path
+# ========================================
+# PATH CONFIGURATION (Consolidated)
+# ========================================
+# Base paths
 export PATH=/opt/homebrew/bin:/opt/homebrew/sbin:$PATH
+export PATH=/usr/local/bin:$PATH
 
-# Source dependent stuff
-# source $ZSH/oh-my-zsh.sh
-source $HOME/.zsh_aliases
-source $HOME/.zsh_functions
-
-
-
-# User configuration
-
-# export MANPATH="/usr/local/man:$MANPATH"
-
-# You may need to manually set your language environment
-# export LANG=en_US.UTF-8
-
-# Preferred editor for local and remote sessions
-# if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
-# else
-#   export EDITOR='mvim'
-# fi
-
-# Compilation flags
-# export ARCHFLAGS="-arch x86_64"
-
-# Set personal aliases, overriding those provided by oh-my-zsh libs,
-# plugins, and themes. Aliases can be placed here, though oh-my-zsh
-# users are encouraged to define aliases within the ZSH_CUSTOM folder.
-# For a full list of active aliases, run `alias`.
-#
-# Example aliases
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
-
-#---------------------------------------------------------------------------------------------------
-# PATH groupings 
-#---------------------------------------------------------------------------------------------------
-
-export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
-# export PATH="$HOME/d/9.1.4.0-IBM-MQ-Toolkit-MacX64/bin:$HOME/d/9.1.4.0-IBM-MQ-Toolkit-MacX64/samp/bin:$PATH"
-# export DYLD_LIBRARY_PATH="$HOME/d/9.1.4.0-IBM-MQ-Toolkit-MacX64/lib64"
-export PATH="/usr/local/opt/python@3.8/bin:/usr/local/bin:$PATH"
+# Development tools
+export PATH="/usr/local/opt/python@3.8/bin:$PATH"
 export PATH="/usr/local/opt/openjdk@17/bin:$PATH"
+export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 
-#---------------------------------------------------------------------------------------------------
-# TOOL specific groupings 
-#---------------------------------------------------------------------------------------------------
-
-# GOLANG
-# [[ -s "/Users/stevengonsalvez/.gvm/scripts/gvm" ]] && source "/Users/stevengonsalvez/.gvm/scripts/gvm"
+# Go
 export GOPATH=$HOME/go
 export GOBIN=$GOPATH/bin
 export PATH=$PATH:$GOPATH:$GOBIN
-export GPG_TTY=$(tty)
-#export GO111MODULE=off
 
-gpgconf --launch gpg-agent
-
-
-# NVM
-
-  export NVM_DIR="$HOME/.nvm"
-  [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
-  [ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
-
-
-# pyenv
+# Python (pyenv)
 export PATH=$(pyenv root)/shims:$PATH
 
-# Node
-export  NODE_OPTIONS="--no-deprecation"
+# Ruby
+export PATH=$HOME/.gem/bin:$PATH
 
+# Flutter
+export PATH=$PATH:~/d/flutter/flutter/bin
 
-## terraform
+# Custom scripts
+PATH_DIR="$HOME/cht"
+export PATH=$PATH:$PATH_DIR
+
+# ========================================
+# PLUGIN MANAGEMENT (zplug)
+# ========================================
+export ZPLUG_HOME=$HOMEBREW_PREFIX/opt/zplug
+source $ZPLUG_HOME/init.zsh
+
+# Load plugins
+zplug "plugins/git", from:oh-my-zsh
+zplug "tysonwolker/iterm-tab-colors"
+zplug "plugins/dotenv", from:oh-my-zsh
+zplug "djui/alias-tips"
+zplug "zsh-users/zsh-syntax-highlighting"
+zplug "zsh-users/zsh-autosuggestions"
+zplug "zsh-users/zsh-completions"
+
+# Install plugins if needed
+if ! zplug check; then
+    zplug install
+fi
+
+# Load plugins
+zplug load
+
+# ========================================
+# THEME
+# ========================================
+source $(brew --prefix)/share/powerlevel10k/powerlevel10k.zsh-theme
+
+# ========================================
+# COMPLETIONS
+# ========================================
+autoload -Uz compinit
+# Only check for insecure directories once a day
+for dump in ~/.zcompdump(N.mh+24); do
+  compinit
+done
+compinit -C
+
+autoload bashcompinit && bashcompinit
+[[ -f /opt/homebrew/etc/bash_completion.d/az ]] && source /opt/homebrew/etc/bash_completion.d/az
+
+# ========================================
+# TOOL CONFIGURATIONS
+# ========================================
+# Autojump
+[[ -s `brew --prefix`/etc/autojump.sh ]] && . `brew --prefix`/etc/autojump.sh
+
+# NVM (lazy loading for faster startup)
+export NVM_DIR="$HOME/.nvm"
+function nvm() {
+  unset -f nvm
+  [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"
+  [ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"
+  nvm "$@"
+}
+
+# Node.js
+export NODE_OPTIONS="--no-deprecation"
+
+# Terraform
 export TF_CLI_ARGS_plan="-compact-warnings"
 export TF_CLI_ARGS_apply="-compact-warnings"
 
@@ -265,46 +177,83 @@ export PATH=$PATH:$HOME/Library/Android/sdk/platform-tools;$HOME/Library/Android
 
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
 export SDKMAN_DIR="$HOME/.sdkman"
-[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
+function sdk() {
+  unset -f sdk
+  [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
+  sdk "$@"
+}
 
-
+# rbenv
 if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
 
+# Conda (lazy loading)
+function conda() {
+  unset -f conda
+  __conda_setup="$('/Users/stevengonsalvez/anaconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+  if [ $? -eq 0 ]; then
+      eval "$__conda_setup"
+  else
+      if [ -f "/Users/stevengonsalvez/anaconda3/etc/profile.d/conda.sh" ]; then
+          . "/Users/stevengonsalvez/anaconda3/etc/profile.d/conda.sh"
+      else
+          export PATH="/Users/stevengonsalvez/anaconda3/bin:$PATH"
+      fi
+  fi
+  unset __conda_setup
+  conda "$@"
+}
 
-# >>> conda initialize >>>
-# !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('/Users/stevengonsalvez/anaconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
-if [ $? -eq 0 ]; then
-    eval "$__conda_setup"
-else
-    if [ -f "/Users/stevengonsalvez/anaconda3/etc/profile.d/conda.sh" ]; then
-        . "/Users/stevengonsalvez/anaconda3/etc/profile.d/conda.sh"
-    else
-        export PATH="/Users/stevengonsalvez/anaconda3/bin:$PATH"
-    fi
-fi
-unset __conda_setup
-# <<< conda initialize <<<
+# GitHub Copilot CLI
+eval "$(github-copilot-cli alias -- "$0")"
+eval "$(gh copilot alias -- zsh)"
 
-# Install plugins if there are plugins that have not been installed
-# if ! zplug check --verbose; then
-#     printf "Install? [y/N]: "
-#     if read -q; then
-#         echo; zplug install
-#     fi
-# fi
-zplug install
+# Google Cloud SDK
+[[ -f "$HOME/google-cloud-sdk/path.zsh.inc" ]] && source "$HOME/google-cloud-sdk/path.zsh.inc"
+[[ -f "$HOME/google-cloud-sdk/completion.zsh.inc" ]] && source "$HOME/google-cloud-sdk/completion.zsh.inc"
 
-# Then, source plugins and add commands to $PATH
-zplug load #--verbose
+# GPG
+gpgconf --launch gpg-agent
 
-echo " ------------------------------READY --------------------------------- "
+# ========================================
+# HISTORY CONFIGURATION
+# ========================================
+HISTFILE=~/.zsh_history
+HISTSIZE=100000
+SAVEHIST=100000
+setopt EXTENDED_HISTORY          # Write the history file in the ":start:elapsed;command" format
+setopt HIST_EXPIRE_DUPS_FIRST    # Expire duplicate entries first when trimming history
+setopt HIST_IGNORE_DUPS          # Don't record an entry that was just recorded again
+setopt HIST_IGNORE_SPACE         # Don't record an entry starting with a space
+setopt HIST_VERIFY               # Don't execute immediately upon history expansion
+setopt INC_APPEND_HISTORY        # Write to the history file immediately, not when the shell exits
+setopt SHARE_HISTORY             # Share history between all sessions
 
-# Q post block. Keep at the bottom of this file.
-# Added by Windsurf
+# ========================================
+# GENERAL ZSH OPTIONS
+# ========================================
+setopt AUTO_CD                   # If you type a directory name, cd into it
+setopt CORRECT                   # Try to correct command spelling
+setopt COMPLETE_IN_WORD          # Complete from both ends of a word
+setopt IGNORE_EOF                # Don't exit on EOF
+setopt INTERACTIVE_COMMENTS      # Allow comments in interactive shells
+
+# ========================================
+# SOURCE ADDITIONAL CONFIGS
+# ========================================
+[[ -f "$HOME/.zsh_aliases" ]] && source "$HOME/.zsh_aliases"
+[[ -f "$HOME/.zsh_functions" ]] && source "$HOME/.zsh_functions"
+[[ -f "$HOME/.p10k.zsh" ]] && source "$HOME/.p10k.zsh"
+
+# ========================================
+# FINAL SETUP (Must be at the end)
+# ========================================
+# Windsurf
 export PATH="/Users/stevengonsalvez/.codeium/windsurf/bin:$PATH"
 
 eval "$(mise activate zsh)"
 
 # Amazon Q post block. Keep at the bottom of this file.
 [[ -f "${HOME}/Library/Application Support/amazon-q/shell/zshrc.post.zsh" ]] && builtin source "${HOME}/Library/Application Support/amazon-q/shell/zshrc.post.zsh"
+
+# Ready message
+echo " ✨ Terminal Ready - $(date +%H:%M:%S) ✨"
