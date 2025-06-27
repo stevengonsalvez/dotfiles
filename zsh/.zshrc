@@ -245,6 +245,20 @@ setopt INTERACTIVE_COMMENTS      # Allow comments in interactive shells
 [[ -f "$HOME/.p10k.zsh" ]] && source "$HOME/.p10k.zsh"
 
 # ========================================
+# WARP TERMINAL CONFIGURATION
+# ========================================
+# Set dynamic tab name based on current directory
+function set_warp_tab_name() {
+  echo -ne "\033]0;$(basename "$PWD")\007"
+}
+
+if [ -n "$ZSH_VERSION" ]; then
+  precmd_functions+=(set_warp_tab_name)
+elif [ -n "$BASH_VERSION" ]; then
+  PROMPT_COMMAND='set_warp_tab_name'
+fi
+
+# ========================================
 # FINAL SETUP (Must be at the end)
 # ========================================
 # Windsurf
