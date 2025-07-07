@@ -169,7 +169,10 @@ export PATH=$HOME/.gem/bin:$PATH
 export PATH=$PATH:~/d/flutter/flutter/bin
 
 ### for android
-export PATH=$PATH:$HOME/Library/Android/sdk/platform-tools;$HOME/Library/Android/sdk/tools/bin
+export ANDROID_HOME=$HOME/Library/Android/sdk
+export PATH=$PATH:$ANDROID_HOME/emulator
+export PATH=$PATH:$ANDROID_HOME/platform-tools
+export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin
 
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
 export SDKMAN_DIR="$HOME/.sdkman"
