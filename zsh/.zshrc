@@ -1,3 +1,5 @@
+# Amazon Q pre block. Keep at the top of this file.
+[[ -f "${HOME}/Library/Application Support/amazon-q/shell/zshrc.pre.zsh" ]] && builtin source "${HOME}/Library/Application Support/amazon-q/shell/zshrc.pre.zsh"
 # ABOUTME: Main zsh configuration file - optimized for performance
 # Sets up environment, paths, plugins, and sources other config files
 
@@ -5,8 +7,6 @@
 # INSTANT PROMPT (Must be at the very top)
 # ========================================
 # Amazon Q pre block
-[[ -f "${HOME}/Library/Application Support/amazon-q/shell/zshrc.pre.zsh" ]] && builtin source "${HOME}/Library/Application Support/amazon-q/shell/zshrc.pre.zsh"
-
 # Enable Powerlevel10k instant prompt
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
@@ -105,14 +105,10 @@ autoload bashcompinit && bashcompinit
 # Autojump
 [[ -s `brew --prefix`/etc/autojump.sh ]] && . `brew --prefix`/etc/autojump.sh
 
-# NVM (lazy loading for faster startup)
+# NVM (properly initialized to make node available)
 export NVM_DIR="$HOME/.nvm"
-function nvm() {
-  unset -f nvm
-  [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"
-  [ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"
-  nvm "$@"
-}
+[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"
+[ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"
 
 # Node.js
 export NODE_OPTIONS="--no-deprecation"
@@ -232,10 +228,14 @@ setopt SHARE_HISTORY             # Share history between all sessions
 # GENERAL ZSH OPTIONS
 # ========================================
 setopt AUTO_CD                   # If you type a directory name, cd into it
-setopt CORRECT                   # Try to correct command spelling
+# setopt CORRECT                   # Try to correct command spelling (DISABLED - causes annoying prompts)
 setopt COMPLETE_IN_WORD          # Complete from both ends of a word
 setopt IGNORE_EOF                # Don't exit on EOF
 setopt INTERACTIVE_COMMENTS      # Allow comments in interactive shells
+
+# Disable autocorrection for specific commands that are commonly misidentified
+unsetopt CORRECT_ALL
+setopt NO_CORRECT
 
 # ========================================
 # SOURCE ADDITIONAL CONFIGS
@@ -266,8 +266,8 @@ export PATH="/Users/stevengonsalvez/.codeium/windsurf/bin:$PATH"
 
 eval "$(mise activate zsh)"
 
-# Amazon Q post block. Keep at the bottom of this file.
-[[ -f "${HOME}/Library/Application Support/amazon-q/shell/zshrc.post.zsh" ]] && builtin source "${HOME}/Library/Application Support/amazon-q/shell/zshrc.post.zsh"
-
 # Ready message
 echo " ✨ Terminal Ready - $(date +%H:%M:%S) ✨"
+
+# Amazon Q post block. Keep at the bottom of this file.
+[[ -f "${HOME}/Library/Application Support/amazon-q/shell/zshrc.post.zsh" ]] && builtin source "${HOME}/Library/Application Support/amazon-q/shell/zshrc.post.zsh"
