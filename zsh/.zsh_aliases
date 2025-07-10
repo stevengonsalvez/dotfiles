@@ -22,7 +22,13 @@ alias gd="git diff"
 alias gds="git diff --staged"
 alias gb="git branch"
 alias gba="git branch -a"
-alias gl="git log --oneline --graph --decorate"
+alias gl="git pull"
+alias gpl="git pull"
+alias gplr="git pull --rebase"
+alias gplra="git pull --rebase --autostash"
+alias gplraa="git pull --rebase --autostash --all"
+alias gplraaa="git pull --rebase --autostash --all --no-edit"
+alias glg="git log --oneline --graph --decorate"
 alias gview="gh repo view --web"
 alias gpr="gh pr create"
 alias gprs="gh pr list"
@@ -125,3 +131,6 @@ alias '??'='gh copilot suggest -t shell'
 alias 'git?'='gh copilot suggest -t git'
 alias 'exp?'='gh copilot explain'
 alias 'ghc'='gh copilot'
+
+# eza shortcuts
+alias e="eza -la"
