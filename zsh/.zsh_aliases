@@ -6,7 +6,6 @@ alias reload!='. ~/.zshrc'
 #alias docker="podman"
 alias ll="ls -ltr"
 alias la="ls -la"
-alias l="ls -CF"
 alias tree="ls -R | grep ":$" | sed -e 's/:$//' -e 's/[^-][^/]*//--/g' -e 's/^/   /' -e 's/-/|/'"
 # alias j="autojump"
 alias vimmy="vim -c 'set mouse=a'"
@@ -134,3 +133,4 @@ alias 'ghc'='gh copilot'
 
 # eza shortcuts
 alias e="eza -la"
+alias l="eza -la"
