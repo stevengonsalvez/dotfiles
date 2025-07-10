@@ -112,6 +112,10 @@ module.exports = {
         browser: "Safari"
       },
       {
+        match: /bttsm/,
+        browser: "Safari"
+      },
+      {
         // Open google.com and *.google.com urls in Google Chrome
         match: [
           "google.com/*", // match google.com urls
