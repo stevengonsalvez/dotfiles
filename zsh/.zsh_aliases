@@ -140,3 +140,7 @@ alias e="eza -la"
 # q / claude power-use shortcuts
 alias qyolo="q chat -a"                       # run q chat trusting all tools
 alias cyolo="claude --dangerously-skip-permissions"  # run claude without permission prompts
+
+# copy pwd to clipboard
+alias cpwd="pwd | tr -d '\n' | pbcopy && echo 'pwd copied to clipboard'"
+
