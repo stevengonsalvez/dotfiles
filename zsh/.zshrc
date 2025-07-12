@@ -271,6 +271,5 @@ eval "$(mise activate zsh)"
 
 # Ready message
 echo " ✨ Terminal Ready - $(date +%H:%M:%S) ✨"
-
 # Amazon Q post block. Keep at the bottom of this file.
 [[ -f "${HOME}/Library/Application Support/amazon-q/shell/zshrc.post.zsh" ]] && builtin source "${HOME}/Library/Application Support/amazon-q/shell/zshrc.post.zsh"
