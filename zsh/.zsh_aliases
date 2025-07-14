@@ -132,6 +132,7 @@ alias 'ghc'='gh copilot'
 
 # eza shortcuts
 alias e="eza -la"
+alias l="eza -la"
 
 
 # ========================================
