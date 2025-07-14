@@ -261,6 +261,10 @@ elif [ -n "$BASH_VERSION" ]; then
   PROMPT_COMMAND='set_warp_tab_name'
 fi
 
+# Rust path
+export PATH="$HOME/.cargo/env:$HOME/.cargo/bin:$PATH"
+
+
 # ========================================
 # FINAL SETUP (Must be at the end)
 # ========================================
