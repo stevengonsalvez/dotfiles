@@ -203,7 +203,6 @@ function conda() {
 }
 
 # GitHub Copilot CLI
-eval "$(github-copilot-cli alias -- "$0")"
 eval "$(gh copilot alias -- zsh)"
 
 # Google Cloud SDK
@@ -277,3 +276,6 @@ eval "$(mise activate zsh)"
 echo " ✨ Terminal Ready - $(date +%H:%M:%S) ✨"
 # Amazon Q post block. Keep at the bottom of this file.
 [[ -f "${HOME}/Library/Application Support/amazon-q/shell/zshrc.post.zsh" ]] && builtin source "${HOME}/Library/Application Support/amazon-q/shell/zshrc.post.zsh"
+
+# bun completions
+[ -s "/Users/stevengonsalvez/.bun/_bun" ] && source "/Users/stevengonsalvez/.bun/_bun"
