@@ -31,9 +31,8 @@ export HOMEBREW_PREFIX=$(brew --prefix)
 # ========================================
 # PATH CONFIGURATION (Consolidated)
 # ========================================
-# Base paths
-export PATH=/opt/homebrew/bin:/opt/homebrew/sbin:$PATH
-export PATH=/usr/local/bin:$PATH
+# Base paths (Intel Mac uses /usr/local for Homebrew)
+export PATH=/usr/local/bin:/usr/local/sbin:$PATH
 
 # Development tools
 export PATH="/usr/local/opt/python@3.8/bin:$PATH"
@@ -97,7 +96,7 @@ done
 compinit -C
 
 autoload bashcompinit && bashcompinit
-[[ -f /opt/homebrew/etc/bash_completion.d/az ]] && source /opt/homebrew/etc/bash_completion.d/az
+[[ -f /usr/local/etc/bash_completion.d/az ]] && source /usr/local/etc/bash_completion.d/az
 
 # ========================================
 # TOOL CONFIGURATIONS
@@ -107,8 +106,8 @@ autoload bashcompinit && bashcompinit
 
 # NVM (properly initialized to make node available)
 export NVM_DIR="$HOME/.nvm"
-[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"
-[ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"
+[ -s "/usr/local/opt/nvm/nvm.sh" ] && \. "/usr/local/opt/nvm/nvm.sh"
+[ -s "/usr/local/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/usr/local/opt/nvm/etc/bash_completion.d/nvm"
 
 # Node.js
 export NODE_OPTIONS="--no-deprecation"
@@ -140,10 +139,7 @@ if [ -f '$HOME/google-cloud-sdk/completion.zsh.inc' ]; then . '$HOME/google-clou
 #alternate for git colour
 #PS1="20%D %*%B%{$fg[red]%}[%{$fg[yellow]%}%n%{$fg[green]%}@%{$fg[blue]%}%M %{$fg[magenta]%}%~%{$fg[red]%}]%{$reset_color%}$%b "
 
-autoload bashcompinit && bashcompinit
-compinit -i
-## this is path on the M1 macs
-source /opt/homebrew/etc/bash_completion.d/az
+# Azure CLI completions already loaded above
 
 # java
 source ~/.sdkman/bin/sdkman-init.sh
