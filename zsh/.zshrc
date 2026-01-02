@@ -1,6 +1,4 @@
-# Amazon Q pre block. Keep at the top of this file.
-[[ -f "${HOME}/Library/Application Support/amazon-q/shell/zshrc.pre.zsh" ]] && builtin source "${HOME}/Library/Application Support/amazon-q/shell/zshrc.pre.zsh"
-# ABOUTME: Main zsh configuration file - optimized for performance
+# ABOUTME: Main zsh configuration file - minimal server setup
 # Sets up environment, paths, plugins, and sources other config files
 
 # ========================================
@@ -63,11 +61,8 @@ export PATH=$PATH:$PATH_DIR
 export ZPLUG_HOME=$HOMEBREW_PREFIX/opt/zplug
 source $ZPLUG_HOME/init.zsh
 
-# Load plugins
+# Load plugins (minimal set for server)
 zplug "plugins/git", from:oh-my-zsh
-zplug "tysonwolker/iterm-tab-colors"
-zplug "plugins/dotenv", from:oh-my-zsh
-zplug "djui/alias-tips"
 zplug "zsh-users/zsh-syntax-highlighting"
 zplug "zsh-users/zsh-autosuggestions"
 zplug "zsh-users/zsh-completions"
@@ -116,12 +111,8 @@ export NODE_OPTIONS="--no-deprecation"
 export TF_CLI_ARGS_plan="-compact-warnings"
 export TF_CLI_ARGS_apply="-compact-warnings"
 
-## Cheatsheet
-PATH_DIR="$HOME/cht"  # or another directory on your $PATH
-mkdir -p "$PATH_DIR"
-curl -s https://cht.sh/:cht.sh > $PATH_DIR/cht.sh
-chmod +x $PATH_DIR/cht.sh
-export PATH=$PATH:$PATH_DIR
+# Cheatsheet directory (if exists)
+[[ -d "$HOME/cht" ]] && export PATH=$PATH:$HOME/cht
 
 # #---------------------------------------------------------------------------------------------------
 # # AUTOcdOMPLETES 
@@ -141,15 +132,10 @@ if [ -f '$HOME/google-cloud-sdk/completion.zsh.inc' ]; then . '$HOME/google-clou
 
 # Azure CLI completions already loaded above
 
-# java
-source ~/.sdkman/bin/sdkman-init.sh
+# SDKMAN is lazy-loaded below
 
 ## some executions of predefined functions
 # setting github token (depends on .zsh_functions)
-
-## copilot cli
-eval "$(gh copilot alias -- zsh)"
-
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
@@ -160,15 +146,9 @@ eval "$(gh copilot alias -- zsh)"
 # For amazon q
 export EDITOR=code
 
-### for flutter
-export PATH=$HOME/.gem/bin:$PATH
-export PATH=$PATH:~/d/flutter/flutter/bin
-
-### for android
-export ANDROID_HOME=$HOME/Library/Android/sdk
-export PATH=$PATH:$ANDROID_HOME/emulator
-export PATH=$PATH:$ANDROID_HOME/platform-tools
-export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin
+# Flutter/Android paths disabled for server use
+# export PATH=$PATH:~/d/flutter/flutter/bin
+# export ANDROID_HOME=$HOME/Library/Android/sdk
 
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
 export SDKMAN_DIR="$HOME/.sdkman"
@@ -197,9 +177,6 @@ function conda() {
   unset __conda_setup
   conda "$@"
 }
-
-# GitHub Copilot CLI
-eval "$(gh copilot alias -- zsh)"
 
 # Google Cloud SDK
 [[ -f "$HOME/google-cloud-sdk/path.zsh.inc" ]] && source "$HOME/google-cloud-sdk/path.zsh.inc"
@@ -242,19 +219,7 @@ setopt NO_CORRECT
 [[ -f "$HOME/.zsh_functions" ]] && source "$HOME/.zsh_functions"
 [[ -f "$HOME/.p10k.zsh" ]] && source "$HOME/.p10k.zsh"
 
-# ========================================
-# WARP TERMINAL CONFIGURATION
-# ========================================
-# Set dynamic tab name based on current directory
-function set_warp_tab_name() {
-  echo -ne "\033]0;$(basename "$PWD")\007"
-}
-
-if [ -n "$ZSH_VERSION" ]; then
-  precmd_functions+=(set_warp_tab_name)
-elif [ -n "$BASH_VERSION" ]; then
-  PROMPT_COMMAND='set_warp_tab_name'
-fi
+# Terminal tab name disabled for server use
 
 # Rust path
 export PATH="$HOME/.cargo/env:$HOME/.cargo/bin:$PATH"
@@ -263,15 +228,5 @@ export PATH="$HOME/.cargo/env:$HOME/.cargo/bin:$PATH"
 # ========================================
 # FINAL SETUP (Must be at the end)
 # ========================================
-# Windsurf
-export PATH="/Users/stevengonsalvez/.codeium/windsurf/bin:$PATH"
-
-eval "$(mise activate zsh)"
-
-# Ready message
-echo " ✨ Terminal Ready - $(date +%H:%M:%S) ✨"
-# Amazon Q post block. Keep at the bottom of this file.
-[[ -f "${HOME}/Library/Application Support/amazon-q/shell/zshrc.post.zsh" ]] && builtin source "${HOME}/Library/Application Support/amazon-q/shell/zshrc.post.zsh"
-
-# bun completions
-[ -s "/Users/stevengonsalvez/.bun/_bun" ] && source "/Users/stevengonsalvez/.bun/_bun"
+# mise tool version manager
+command -v mise &>/dev/null && eval "$(mise activate zsh)"
