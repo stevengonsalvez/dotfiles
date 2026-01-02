@@ -185,8 +185,8 @@ function conda() {
 [[ -f "$HOME/google-cloud-sdk/path.zsh.inc" ]] && source "$HOME/google-cloud-sdk/path.zsh.inc"
 [[ -f "$HOME/google-cloud-sdk/completion.zsh.inc" ]] && source "$HOME/google-cloud-sdk/completion.zsh.inc"
 
-# GPG (if installed)
-command -v gpgconf &>/dev/null && gpgconf --launch gpg-agent
+# GPG agent disabled for server use - enable if needed for signing
+# command -v gpgconf &>/dev/null && gpgconf --launch gpg-agent
 
 # ========================================
 # HISTORY CONFIGURATION
