@@ -32,6 +32,9 @@ export HOMEBREW_PREFIX=$(brew --prefix)
 # Base paths (Intel Mac uses /usr/local for Homebrew)
 export PATH=/usr/local/bin:/usr/local/sbin:$PATH
 
+# Claude CLI
+export PATH="$HOME/.local/bin:$PATH"
+
 # Development tools
 export PATH="/usr/local/opt/python@3.8/bin:$PATH"
 export PATH="/usr/local/opt/openjdk@17/bin:$PATH"
