@@ -224,8 +224,9 @@ setopt NO_CORRECT
 
 # Terminal tab name disabled for server use
 
-# Rust path
-export PATH="$HOME/.cargo/env:$HOME/.cargo/bin:$PATH"
+# Rust (via rustup - must be before homebrew bin)
+export PATH="/usr/local/opt/rustup/bin:$PATH"
+export PATH="$HOME/.cargo/bin:$PATH"
 
 
 # ========================================
