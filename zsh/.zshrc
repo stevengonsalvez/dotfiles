@@ -25,6 +25,9 @@ export GPG_TTY=$(tty)
 export ZSH_DISABLE_COMPFIX=true
 export ZSH="$HOME/.oh-my-zsh"
 
+# Anthropic
+export ANTHROPIC_MODEL="claude-opus-4-5-20251101"
+
 # Homebrew
 export HOMEBREW_PREFIX=$(brew --prefix)
 
@@ -279,3 +282,18 @@ echo " ✨ Terminal Ready - $(date +%H:%M:%S) ✨"
 
 # bun completions
 [ -s "/Users/stevengonsalvez/.bun/_bun" ] && source "/Users/stevengonsalvez/.bun/_bun"
+
+[[ "$TERM_PROGRAM" == "kiro" ]] && . "$(kiro --locate-shell-integration-path zsh)"
+
+# --WCGW_ENVIRONMENT_START--
+if [ -n "$IN_WCGW_ENVIRONMENT" ]; then
+ PROMPT_COMMAND='printf "◉ $(pwd)──➤ \r\e[2K"'
+ prmptcmdwcgw() { eval "$PROMPT_COMMAND" }
+ add-zsh-hook -d precmd prmptcmdwcgw
+ precmd_functions+=prmptcmdwcgw
+fi
+# --WCGW_ENVIRONMENT_END--
+
+# Added by Antigravity
+export PATH="/Users/stevengonsalvez/.antigravity/antigravity/bin:$PATH"
+export PATH="$HOME/.local/bin:$PATH"
