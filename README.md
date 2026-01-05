@@ -91,3 +91,47 @@ rm -rf fonts
 cd ~/.oh-my-zsh/custom/plugins
 git clone https://github.com/bernardop/iterm-tab-color-oh-my-zsh.git iterm-tab-color
 ```
+
+## tmux Server Manager (`tms`)
+
+A unified tool for setting up a Mac as a Tailscale-only SSH server with tmux session management.
+
+### Features
+- Configure SSH to accept connections **only** over Tailscale (blocks Wi-Fi/Ethernet)
+- pf firewall rules as backup protection
+- tmux session management for remote work
+
+### Installation
+
+The `tms` command is automatically available after sourcing `.zshrc` (symlinked to `~/.local/bin/tms`).
+
+### Commands
+
+| Command | Description |
+|---------|-------------|
+| `tms setup` | Configure Mac as Tailscale-only SSH server |
+| `tms rollback` | Restore normal SSH (all interfaces) |
+| `tms status` | Show server status overview |
+| `tms list` | List all tmux sessions |
+| `tms new <name>` | Create new session |
+| `tms attach [name]` | Attach to session |
+| `tms kill <name\|all>` | Kill session(s) |
+| `tms send <session> <cmd>` | Send command to session |
+| `tms capture <session> [n]` | Show last n lines of output |
+| `tms cleanup` | Remove idle sessions |
+
+### Usage
+
+```bash
+# First-time setup on the server Mac
+tms setup
+
+# From another Mac (over Tailscale)
+ssh user@<tailscale-ip>
+
+# Manage sessions
+tms new dev-server
+tms send dev-server 'npm run dev'
+tms list
+tms attach dev-server
+```

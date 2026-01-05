@@ -58,6 +58,15 @@ export PATH=$PATH:~/d/flutter/flutter/bin
 PATH_DIR="$HOME/cht"
 export PATH=$PATH:$PATH_DIR
 
+# Dotfiles bin (tms and other custom tools)
+export PATH="$HOME/.dotfiles/bin:$PATH"
+
+# Ensure tms symlink exists in ~/.local/bin
+if [[ -f "$HOME/.dotfiles/bin/tmux-server-manager.sh" ]] && [[ ! -L "$HOME/.local/bin/tms" ]]; then
+  mkdir -p "$HOME/.local/bin"
+  ln -sf "$HOME/.dotfiles/bin/tmux-server-manager.sh" "$HOME/.local/bin/tms"
+fi
+
 # ========================================
 # PLUGIN MANAGEMENT (zplug)
 # ========================================
@@ -237,3 +246,10 @@ export PATH="$HOME/.cargo/bin:$PATH"
 # ========================================
 # mise tool version manager
 command -v mise &>/dev/null && eval "$(mise activate zsh)"
+
+# bun completions
+[ -s "/Users/stevengonsalvez/.bun/_bun" ] && source "/Users/stevengonsalvez/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
