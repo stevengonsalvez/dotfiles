@@ -253,3 +253,19 @@ command -v mise &>/dev/null && eval "$(mise activate zsh)"
 # bun
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
+
+# Add /usr/sbin for system utilities (sysctl, etc.)
+export PATH="/usr/sbin:$PATH"
+
+# Oracle/ora defaults
+export ORA_ENGINE="browser"
+export ORA_PRIMARY_MODEL="gemini-3-pro"
+export ORA_FALLBACK_MODEL="gpt-5.2-pro"
+
+# Alias oracle to always use browser mode
+alias oracle='PATH="/usr/sbin:$PATH" oracle --engine browser'
+
+# Clawdbot aliases
+alias clawdbot="node ~/d/git/clawdbot/dist/entry.js"
+alias popashot="clawdbot tui --session agent:popashot:main"
+alias popa="clawdbot tui --session agent:main:main"
