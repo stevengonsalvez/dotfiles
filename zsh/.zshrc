@@ -2,9 +2,24 @@
 # Sets up environment, paths, plugins, and sources other config files
 
 # ========================================
-# INSTANT PROMPT (Must be at the very top)
+# NON-INTERACTIVE SHELL EARLY EXIT
 # ========================================
-# Amazon Q pre block
+# Skip heavy interactive setup for non-interactive shells (scripts, subagents, etc.)
+# This prevents Claude Code teammate tool and other automated tools from hanging
+if [[ ! -o interactive ]]; then
+  # Minimal PATH setup for non-interactive shells (Intel Mac)
+  export PATH=/usr/local/bin:/usr/local/sbin:$PATH
+  export PATH="$HOME/.cargo/bin:$PATH"
+  export PATH="$HOME/.local/bin:$PATH"
+  export GOPATH=$HOME/go
+  export GOBIN=$GOPATH/bin
+  export PATH=$PATH:$GOPATH:$GOBIN
+  return 0
+fi
+
+# ========================================
+# INSTANT PROMPT (Must be at the very top, INTERACTIVE ONLY)
+# ========================================
 # Enable Powerlevel10k instant prompt
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
@@ -123,7 +138,7 @@ export NODE_OPTIONS="--no-deprecation"
 export TF_CLI_ARGS_plan="-compact-warnings"
 export TF_CLI_ARGS_apply="-compact-warnings"
 
-# Cheatsheet directory (if exists)
+# Cheatsheet directory (if exists, no curl on every init)
 [[ -d "$HOME/cht" ]] && export PATH=$PATH:$HOME/cht
 
 # #---------------------------------------------------------------------------------------------------
@@ -247,6 +262,11 @@ export PATH="$HOME/.cargo/bin:$PATH"
 # mise tool version manager
 command -v mise &>/dev/null && eval "$(mise activate zsh)"
 
+# Ready message (only in real interactive terminals with a TTY)
+if [[ -t 1 && -z "$CLAUDE_CODE" && -z "$AGENT_SESSION" ]]; then
+  echo " ✨ Terminal Ready - $(date +%H:%M:%S) ✨"
+fi
+
 # bun completions
 [ -s "/Users/stevengonsalvez/.bun/_bun" ] && source "/Users/stevengonsalvez/.bun/_bun"
 
@@ -269,3 +289,6 @@ alias oracle='PATH="/usr/sbin:$PATH" oracle --engine browser'
 alias clawdbot="node ~/d/git/clawdbot/dist/entry.js"
 alias popashot="clawdbot tui --session agent:popashot:main"
 alias popa="clawdbot tui --session agent:main:main"
+
+# Load local secrets (not committed to git)
+[[ -f ~/.secrets ]] && source ~/.secrets
