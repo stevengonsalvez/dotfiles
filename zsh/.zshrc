@@ -4,9 +4,24 @@
 # Sets up environment, paths, plugins, and sources other config files
 
 # ========================================
-# INSTANT PROMPT (Must be at the very top)
+# NON-INTERACTIVE SHELL EARLY EXIT
 # ========================================
-# Amazon Q pre block
+# Skip heavy interactive setup for non-interactive shells (scripts, subagents, etc.)
+# This prevents Claude Code teammate tool and other automated tools from hanging
+if [[ ! -o interactive ]]; then
+  # Minimal PATH setup for non-interactive shells
+  export PATH=/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:$PATH
+  export PATH="$HOME/.cargo/bin:$PATH"
+  export PATH="$HOME/.local/bin:$PATH"
+  export GOPATH=$HOME/go
+  export GOBIN=$GOPATH/bin
+  export PATH=$PATH:$GOPATH:$GOBIN
+  return 0
+fi
+
+# ========================================
+# INSTANT PROMPT (Must be at the very top, INTERACTIVE ONLY)
+# ========================================
 # Enable Powerlevel10k instant prompt
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
@@ -120,11 +135,13 @@ export NODE_OPTIONS="--no-deprecation"
 export TF_CLI_ARGS_plan="-compact-warnings"
 export TF_CLI_ARGS_apply="-compact-warnings"
 
-## Cheatsheet
-PATH_DIR="$HOME/cht"  # or another directory on your $PATH
-mkdir -p "$PATH_DIR"
-curl -s https://cht.sh/:cht.sh > $PATH_DIR/cht.sh
-chmod +x $PATH_DIR/cht.sh
+## Cheatsheet - setup once, not on every shell init
+PATH_DIR="$HOME/cht"
+if [[ ! -f "$PATH_DIR/cht.sh" ]]; then
+  mkdir -p "$PATH_DIR"
+  curl -s https://cht.sh/:cht.sh > "$PATH_DIR/cht.sh"
+  chmod +x "$PATH_DIR/cht.sh"
+fi
 export PATH=$PATH:$PATH_DIR
 
 # #---------------------------------------------------------------------------------------------------
@@ -275,8 +292,10 @@ export PATH="/Users/stevengonsalvez/.codeium/windsurf/bin:$PATH"
 
 eval "$(mise activate zsh)"
 
-# Ready message
-echo " ✨ Terminal Ready - $(date +%H:%M:%S) ✨"
+# Ready message (only in real interactive terminals with a TTY)
+if [[ -t 1 && -z "$CLAUDE_CODE" && -z "$AGENT_SESSION" ]]; then
+  echo " ✨ Terminal Ready - $(date +%H:%M:%S) ✨"
+fi
 # Amazon Q post block. Keep at the bottom of this file.
 [[ -f "${HOME}/Library/Application Support/amazon-q/shell/zshrc.post.zsh" ]] && builtin source "${HOME}/Library/Application Support/amazon-q/shell/zshrc.post.zsh"
 
