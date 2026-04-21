@@ -174,8 +174,14 @@ bwsess() {
     bw login --apikey >/dev/null 2>&1 || { echo "✗ login failed"; return 1; }
   fi
 
-  echo "→ unlocking vault (enter master password)..."
-  local session; session=$(bw unlock --raw)
+  local session mp_file="$HOME/.secrets/bw-master"
+  if [[ -f "$mp_file" ]]; then
+    echo "→ unlocking vault (auto, via ~/.secrets/bw-master)..."
+    session=$(BW_PASSWORD=$(cat "$mp_file") bw unlock --passwordenv BW_PASSWORD --raw)
+  else
+    echo "→ unlocking vault (enter master password)..."
+    session=$(bw unlock --raw)
+  fi
   [[ -z "$session" ]] && { echo "✗ unlock failed"; return 1; }
 
   if [[ -n "$TMUX" ]] && command -v reattach-to-user-namespace >/dev/null 2>&1; then
