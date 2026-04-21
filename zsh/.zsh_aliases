@@ -145,3 +145,56 @@ alias cyolo="claude --dangerously-skip-permissions"  # run claude without permis
 # copy pwd to clipboard
 alias cpwd="pwd | tr -d '\n' | pbcopy && echo 'pwd copied to clipboard'"
 
+
+#---------------------------------------------------------------------------------------------------
+# Bitwarden session helper — credentials live in ~/.secrets/bitwarden-credentials (NEVER commit)
+#---------------------------------------------------------------------------------------------------
+bwsess() {
+  local creds="$HOME/.secrets/bitwarden-credentials"
+  [[ ! -f "$creds" ]] && { echo "✗ missing $creds"; return 1; }
+
+  # Load BW_CLIENT_ID / BW_CLIENT_SECRET from env file, map to bw's expected names
+  local line key val
+  while IFS='=' read -r key val; do
+    [[ "$key" =~ ^# ]] || [[ -z "$key" ]] && continue
+    case "$key" in
+      BW_CLIENT_ID)     export BW_CLIENTID="$val" ;;
+      BW_CLIENT_SECRET) export BW_CLIENTSECRET="$val" ;;
+    esac
+  done < "$creds"
+
+  [[ -z "$BW_CLIENTID" || -z "$BW_CLIENTSECRET" ]] && { echo "✗ creds not loaded"; return 1; }
+
+  local status
+  status=$(bw status 2>/dev/null | sed -n 's/.*"status":"\([^"]*\)".*/\1/p')
+  [[ -z "$status" ]] && status="unauthenticated"
+
+  if [[ "$status" == "unauthenticated" ]]; then
+    echo "→ logging in via API key..."
+    bw login --apikey >/dev/null 2>&1 || { echo "✗ login failed"; return 1; }
+  fi
+
+  echo "→ unlocking vault (enter master password)..."
+  local session; session=$(bw unlock --raw)
+  [[ -z "$session" ]] && { echo "✗ unlock failed"; return 1; }
+
+  if [[ -n "$TMUX" ]] && command -v reattach-to-user-namespace >/dev/null 2>&1; then
+    printf %s "$session" | reattach-to-user-namespace pbcopy
+  else
+    printf %s "$session" | pbcopy 2>/dev/null
+  fi
+
+  printf %s "$session" > /tmp/bw_session.txt
+  chmod 600 /tmp/bw_session.txt
+  export BW_SESSION="$session"
+
+  echo "✓ BW_SESSION copied to clipboard (${#session} chars)"
+  echo "  exported in current shell · backup: /tmp/bw_session.txt"
+}
+
+bwsess-logout() {
+  bw logout 2>/dev/null
+  unset BW_SESSION BW_CLIENTID BW_CLIENTSECRET
+  rm -f /tmp/bw_session.txt
+  echo "✓ logged out, session cleared"
+}
