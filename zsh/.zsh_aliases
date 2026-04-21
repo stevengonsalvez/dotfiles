@@ -165,11 +165,11 @@ bwsess() {
 
   [[ -z "$BW_CLIENTID" || -z "$BW_CLIENTSECRET" ]] && { echo "✗ creds not loaded"; return 1; }
 
-  local status
-  status=$(bw status 2>/dev/null | sed -n 's/.*"status":"\([^"]*\)".*/\1/p')
-  [[ -z "$status" ]] && status="unauthenticated"
+  local bw_state
+  bw_state=$(bw status 2>/dev/null | sed -n 's/.*"status":"\([^"]*\)".*/\1/p')
+  [[ -z "$bw_state" ]] && bw_state="unauthenticated"
 
-  if [[ "$status" == "unauthenticated" ]]; then
+  if [[ "$bw_state" == "unauthenticated" ]]; then
     echo "→ logging in via API key..."
     bw login --apikey >/dev/null 2>&1 || { echo "✗ login failed"; return 1; }
   fi
