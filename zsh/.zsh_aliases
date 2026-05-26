@@ -141,6 +141,8 @@ alias l="eza -la"
 # q / claude power-use shortcuts
 alias qyolo="q chat -a"                       # run q chat trusting all tools
 alias cyolo="claude --dangerously-skip-permissions"  # run claude without permission prompts
+alias cwf="DISABLE_GROWTHBOOK=1 claude --dangerously-skip-permissions"  # claude with workflows on (disables remote-control)
+alias cwfn="DISABLE_GROWTHBOOK=1 claude"  # claude with workflows on, normal permissions
 
 # copy pwd to clipboard
 alias cpwd="pwd | tr -d '\n' | pbcopy && echo 'pwd copied to clipboard'"
