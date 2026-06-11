@@ -332,3 +332,6 @@ alias oracle='PATH="/usr/sbin:$PATH" oracle --engine browser'
 alias clawdbot="node ~/d/git/clawdbot/dist/entry.js"
 alias popashot="clawdbot tui --session agent:popashot:main"
 alias popa="clawdbot tui --session agent:main:main"
+
+# Grafana Cloud OTLP creds for local Alloy/OTEL tooling (machine-local file, never committed)
+[ -f "$HOME/.agents-in-a-box/otel/grafana-cloud.env" ] && source "$HOME/.agents-in-a-box/otel/grafana-cloud.env"
