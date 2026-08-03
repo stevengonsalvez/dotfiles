@@ -1,15 +1,14 @@
 # Amazon Q pre block. Keep at the top of this file.
 [[ -f "${HOME}/Library/Application Support/amazon-q/shell/zshrc.pre.zsh" ]] && builtin source "${HOME}/Library/Application Support/amazon-q/shell/zshrc.pre.zsh"
-# ABOUTME: Main zsh configuration file - optimized for performance
-# Sets up environment, paths, plugins, and sources other config files
+# ABOUTME: Main zsh configuration file - optimized for fast startup
+# Rule: nothing at startup may fork a process. Slow tool init is cached
+# (~/.cache/zsh) or lazy-loaded behind a stub function. Run `zshtime` to
+# measure, `zshcache-clear` after upgrading gh/mise/pyenv/etc.
 
 # ========================================
 # NON-INTERACTIVE SHELL EARLY EXIT
 # ========================================
-# Skip heavy interactive setup for non-interactive shells (scripts, subagents, etc.)
-# This prevents Claude Code teammate tool and other automated tools from hanging
 if [[ ! -o interactive ]]; then
-  # Minimal PATH setup for non-interactive shells
   export PATH=/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:$PATH
   export PATH="$HOME/.cargo/bin:$PATH"
   export PATH="$HOME/.local/bin:$PATH"
@@ -20,289 +19,235 @@ if [[ ! -o interactive ]]; then
 fi
 
 # ========================================
-# INSTANT PROMPT (Must be at the very top, INTERACTIVE ONLY)
+# INSTANT PROMPT (must stay near the top)
 # ========================================
-# Enable Powerlevel10k instant prompt
+# Anything that prints to the console before this point kills instant prompt.
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
+setopt extended_glob
+
+# ========================================
+# EVAL CACHE
+# ========================================
+# Caches the stdout of slow `eval "$(tool init)"` commands. Refreshes when the
+# cache is older than a week; `zshcache-clear` forces it after a tool upgrade.
+ZSH_EVALCACHE_DIR=$HOME/.cache/zsh
+[[ -d $ZSH_EVALCACHE_DIR ]] || mkdir -p $ZSH_EVALCACHE_DIR
+
+_evalcache() {  # _evalcache <name> <command> [args...]
+  local f=$ZSH_EVALCACHE_DIR/$1.zsh; shift
+  if [[ ! -s $f || -n ${f}(#qNmh+168) ]]; then
+    command "$@" >| $f 2>/dev/null || return
+  fi
+  source $f
+}
+
+zshcache-clear() { rm -f $ZSH_EVALCACHE_DIR/*.zsh(N); echo "eval cache cleared; run: exec zsh" }
+zshtime() { for i in 1 2 3; do /usr/bin/time zsh -i -c exit; done }
+zshprof() { ZSH_PROFILE_RC=1 zsh -i -c 'zprof | head -30' }
+
+[[ -n $ZSH_PROFILE_RC ]] && zmodload zsh/zprof
+
 # ========================================
 # ENVIRONMENT VARIABLES
 # ========================================
-# Terminal settings
 export TERM=xterm-256color
 export CLICOLOR=1
 export LSCOLORS=ExFxBxDxCxegedabagacad
-export GPG_TTY=$(tty)
+export GPG_TTY=$TTY               # zsh sets $TTY for free; $(tty) forks
+export EDITOR=code
+export NODE_OPTIONS="--no-deprecation"
+export TF_CLI_ARGS_plan="-compact-warnings"
+export TF_CLI_ARGS_apply="-compact-warnings"
+export LEARNINGS_HOME="$HOME/.learnings"
 
-# Oh-my-zsh settings
 export ZSH_DISABLE_COMPFIX=true
 export ZSH="$HOME/.oh-my-zsh"
+export HOMEBREW_PREFIX=/opt/homebrew   # hardcoded; `brew --prefix` costs ~150ms
 
-# Anthropic
-export ANTHROPIC_MODEL="claude-opus-4-5-20251101"
-
-# Homebrew
-export HOMEBREW_PREFIX=$(brew --prefix)
+# Oracle/ora defaults
+export ORA_ENGINE="browser"
+export ORA_PRIMARY_MODEL="gemini-3-pro"
+export ORA_FALLBACK_MODEL="gpt-5.2-pro"
 
 # ========================================
-# PATH CONFIGURATION (Consolidated)
+# PATH (single pass, no subshells)
 # ========================================
-# Base paths
-export PATH=/opt/homebrew/bin:/opt/homebrew/sbin:$PATH
-export PATH=/usr/local/bin:$PATH
-
-# Development tools
-export PATH="/usr/local/opt/python@3.8/bin:$PATH"
-export PATH="/usr/local/opt/openjdk@17/bin:$PATH"
-export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
-
-# Go
 export GOPATH=$HOME/go
 export GOBIN=$GOPATH/bin
-export PATH=$PATH:$GOPATH:$GOBIN
+export ANDROID_HOME=$HOME/Library/Android/sdk
+export PYENV_ROOT=$HOME/.pyenv
 
-# Python (pyenv)
-export PATH=$(pyenv root)/shims:$PATH
+path=(
+  /usr/sbin
+  $HOME/.local/bin
+  $HOME/.antigravity/antigravity/bin
+  $HOME/.codeium/windsurf/bin
+  $HOME/.cargo/bin
+  $HOME/.gem/bin
+  $PYENV_ROOT/shims
+  ${KREW_ROOT:-$HOME/.krew}/bin
+  /usr/local/opt/openjdk@17/bin
+  /usr/local/opt/python@3.8/bin
+  /opt/homebrew/bin
+  /opt/homebrew/sbin
+  /usr/local/bin
+  $path
+  $GOPATH
+  $GOBIN
+  $HOME/d/flutter/flutter/bin
+  $HOME/cht
+  $ANDROID_HOME/emulator
+  $ANDROID_HOME/platform-tools
+  $ANDROID_HOME/cmdline-tools/latest/bin
+)
+typeset -U path                       # dedupe, keep first occurrence
+path=($^path(N-/))                    # drop entries that don't exist
 
-# Ruby
-export PATH=$HOME/.gem/bin:$PATH
-
-# Flutter
-export PATH=$PATH:~/d/flutter/flutter/bin
-
-# Custom scripts
-PATH_DIR="$HOME/cht"
-export PATH=$PATH:$PATH_DIR
-
-# ========================================
-# PLUGIN MANAGEMENT (zplug)
-# ========================================
-export ZPLUG_HOME=$HOMEBREW_PREFIX/opt/zplug
-source $ZPLUG_HOME/init.zsh
-
-# Load plugins
-zplug "plugins/git", from:oh-my-zsh
-zplug "tysonwolker/iterm-tab-colors"
-zplug "plugins/dotenv", from:oh-my-zsh
-zplug "djui/alias-tips"
-zplug "zsh-users/zsh-syntax-highlighting"
-zplug "zsh-users/zsh-autosuggestions"
-zplug "zsh-users/zsh-completions"
-
-# Install plugins if needed
-if ! zplug check; then
-    zplug install
+# Node from nvm's default alias, without sourcing nvm.sh (~1s). `nvm` itself is
+# lazy-loaded below; this only puts the default version's bin on PATH.
+export NVM_DIR="$HOME/.nvm"
+if [[ -r $NVM_DIR/alias/default ]]; then
+  read -r _nvm_default < $NVM_DIR/alias/default
+  [[ -d $NVM_DIR/versions/node/$_nvm_default/bin ]] && \
+    path=($NVM_DIR/versions/node/$_nvm_default/bin $path)
+  unset _nvm_default
 fi
 
-# Load plugins
-zplug load
+# ========================================
+# PLUGINS (sourced directly; zplug added ~800ms of flock/awk overhead)
+# ========================================
+ZSH_PLUGINS=$HOME/.zsh/plugins
+
+# Bootstrap on a fresh machine (or after deleting ~/.zsh/plugins):
+zsh-plugins-install() {
+  local p
+  mkdir -p $ZSH_PLUGINS
+  for p in djui/alias-tips zsh-users/zsh-autosuggestions \
+           zsh-users/zsh-completions zsh-users/zsh-syntax-highlighting; do
+    [[ -d $ZSH_PLUGINS/${p:t} ]] || git clone --depth 1 https://github.com/$p $ZSH_PLUGINS/${p:t}
+  done
+}
+
+# ---- completions: one compinit, was five. Must run before any plugin that
+# ---- calls compdef (the omz git plugin does).
+fpath=($ZSH_PLUGINS/zsh-completions/src $fpath)
+autoload -Uz compinit
+# Full compinit (security audit + rebuild) at most once a day; -C otherwise.
+if [[ -n ${HOME}/.zcompdump(#qNmh-24) ]]; then
+  compinit -C
+else
+  compinit
+  # compile the dump so the next shell loads bytecode
+  [[ ! -s ~/.zcompdump.zwc || ~/.zcompdump -nt ~/.zcompdump.zwc ]] && zcompile ~/.zcompdump
+fi
+
+source $ZSH/lib/git.zsh                     # helpers used by the git plugin
+source $ZSH/plugins/git/git.plugin.zsh
+source $ZSH/plugins/dotenv/dotenv.plugin.zsh
+source $ZSH_PLUGINS/alias-tips/alias-tips.plugin.zsh
+
+# Dropped: tysonwolker/iterm-tab-colors - it ran an AppleScript per prompt
+# (~400ms x5 at startup, 37% of total). Re-add if you miss the tab colours.
 
 # ========================================
 # THEME
 # ========================================
-source $(brew --prefix)/share/powerlevel10k/powerlevel10k.zsh-theme
+source $HOMEBREW_PREFIX/share/powerlevel10k/powerlevel10k.zsh-theme
+[[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
 
 # ========================================
-# COMPLETIONS
+# LAZY TOOL LOADING
 # ========================================
-autoload -Uz compinit
-# Only check for insecure directories once a day
-for dump in ~/.zcompdump(N.mh+24); do
-  compinit
-done
-compinit -C
+# Each stub replaces itself with the real thing on first call.
+_lazy() {  # _lazy "<loader body>" cmd...
+  local body=$1; shift
+  local c all="$*"
+  for c in "$@"; do
+    eval "$c() { unfunction $all 2>/dev/null; $body; $c \"\$@\" }"
+  done
+}
 
-autoload bashcompinit && bashcompinit
-[[ -f /opt/homebrew/etc/bash_completion.d/az ]] && source /opt/homebrew/etc/bash_completion.d/az
+# nvm (~1s to source)
+_lazy '[[ -s /opt/homebrew/opt/nvm/nvm.sh ]] && source /opt/homebrew/opt/nvm/nvm.sh' nvm
 
-# ========================================
-# TOOL CONFIGURATIONS
-# ========================================
-# Autojump
-[[ -s `brew --prefix`/etc/autojump.sh ]] && . `brew --prefix`/etc/autojump.sh
-
-# NVM (properly initialized to make node available)
-export NVM_DIR="$HOME/.nvm"
-[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"
-[ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"
-
-# Node.js
-export NODE_OPTIONS="--no-deprecation"
-
-# Terraform
-export TF_CLI_ARGS_plan="-compact-warnings"
-export TF_CLI_ARGS_apply="-compact-warnings"
-
-## Cheatsheet - setup once, not on every shell init
-PATH_DIR="$HOME/cht"
-if [[ ! -f "$PATH_DIR/cht.sh" ]]; then
-  mkdir -p "$PATH_DIR"
-  curl -s https://cht.sh/:cht.sh > "$PATH_DIR/cht.sh"
-  chmod +x "$PATH_DIR/cht.sh"
-fi
-export PATH=$PATH:$PATH_DIR
-
-# #---------------------------------------------------------------------------------------------------
-# # AUTOcdOMPLETES 
-# #---------------------------------------------------------------------------------------------------
-# # https://github.com/nvbn/thefuck
-# eval $(thefuck --alias)
-
-
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f '$HOME/google-cloud-sdk/path.zsh.inc' ]; then . '$HOME/google-cloud-sdk/path.zsh.inc'; fi
-
-# The next line enables shell command completion for gcloud.
-if [ -f '$HOME/google-cloud-sdk/completion.zsh.inc' ]; then . '$HOME/google-cloud-sdk/completion.zsh.inc'; fi
-
-#alternate for git colour
-#PS1="20%D %*%B%{$fg[red]%}[%{$fg[yellow]%}%n%{$fg[green]%}@%{$fg[blue]%}%M %{$fg[magenta]%}%~%{$fg[red]%}]%{$reset_color%}$%b "
-
-autoload bashcompinit && bashcompinit
-compinit -i
-## this is path on the M1 macs
-source /opt/homebrew/etc/bash_completion.d/az
-
-# java
-source ~/.sdkman/bin/sdkman-init.sh
-
-## some executions of predefined functions
-# setting github token (depends on .zsh_functions)
-
-## copilot cli
-eval "$(gh copilot alias -- zsh)"
-
-
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-
-# Not waiting 
-# bwss
-# bwe "gh-main-pat"
-# For amazon q
-export EDITOR=code
-
-### for flutter
-export PATH=$HOME/.gem/bin:$PATH
-export PATH=$PATH:~/d/flutter/flutter/bin
-
-### for android
-export ANDROID_HOME=$HOME/Library/Android/sdk
-export PATH=$PATH:$ANDROID_HOME/emulator
-export PATH=$PATH:$ANDROID_HOME/platform-tools
-export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin
-
-#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
+# sdkman (~120ms)
 export SDKMAN_DIR="$HOME/.sdkman"
-function sdk() {
-  unset -f sdk
-  [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
-  sdk "$@"
+_lazy '[[ -s $SDKMAN_DIR/bin/sdkman-init.sh ]] && source $SDKMAN_DIR/bin/sdkman-init.sh' sdk
+
+# conda
+_lazy 'source $HOME/anaconda3/etc/profile.d/conda.sh 2>/dev/null || path=($HOME/anaconda3/bin $path)' conda
+
+# rbenv - `which rbenv` + `rbenv init -` both forked at startup
+_lazy 'eval "$(command rbenv init - zsh)"' rbenv
+
+# azure cli completion (~130ms, was sourced twice)
+az() {
+  unfunction az
+  autoload -Uz bashcompinit && bashcompinit
+  [[ -f /opt/homebrew/etc/bash_completion.d/az ]] && source /opt/homebrew/etc/bash_completion.d/az
+  command az "$@"
 }
 
-# rbenv
-if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
+# autojump
+[[ -s /opt/homebrew/etc/autojump.sh ]] && source /opt/homebrew/etc/autojump.sh
 
-# Conda (lazy loading)
-function conda() {
-  unset -f conda
-  __conda_setup="$('/Users/stevengonsalvez/anaconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
-  if [ $? -eq 0 ]; then
-      eval "$__conda_setup"
-  else
-      if [ -f "/Users/stevengonsalvez/anaconda3/etc/profile.d/conda.sh" ]; then
-          . "/Users/stevengonsalvez/anaconda3/etc/profile.d/conda.sh"
-      else
-          export PATH="/Users/stevengonsalvez/anaconda3/bin:$PATH"
-      fi
-  fi
-  unset __conda_setup
-  conda "$@"
+# gh copilot aliases (~1.5s per eval, and it was evaluated twice)
+_evalcache gh-copilot gh copilot alias -- zsh
+
+# mise: NOT activated. `mise ls` is empty and there is no global config, so the
+# precmd hook was costing ~136ms per prompt for nothing. Run `mise-on` in a
+# shell that needs it (or restore the _evalcache line if you start using mise).
+mise-on() { eval "$(command mise activate zsh)"; echo "mise activated in this shell" }
+
+# Cheatsheet fetch: was a curl check on every shell. Run `cht-install` once.
+cht-install() {
+  mkdir -p ~/cht && curl -s https://cht.sh/:cht.sh > ~/cht/cht.sh && chmod +x ~/cht/cht.sh
 }
 
-# GitHub Copilot CLI
-eval "$(gh copilot alias -- zsh)"
-
-# Google Cloud SDK
-[[ -f "$HOME/google-cloud-sdk/path.zsh.inc" ]] && source "$HOME/google-cloud-sdk/path.zsh.inc"
-[[ -f "$HOME/google-cloud-sdk/completion.zsh.inc" ]] && source "$HOME/google-cloud-sdk/completion.zsh.inc"
-
-# GPG
-gpgconf --launch gpg-agent
+# Dropped `gpgconf --launch gpg-agent` (~600ms) - gpg launches its agent on
+# first use anyway. Run it by hand if a signing hang ever suggests otherwise.
 
 # ========================================
-# HISTORY CONFIGURATION
+# HISTORY
 # ========================================
 HISTFILE=~/.zsh_history
 HISTSIZE=100000
 SAVEHIST=100000
-setopt EXTENDED_HISTORY          # Write the history file in the ":start:elapsed;command" format
-setopt HIST_EXPIRE_DUPS_FIRST    # Expire duplicate entries first when trimming history
-setopt HIST_IGNORE_DUPS          # Don't record an entry that was just recorded again
-setopt HIST_IGNORE_SPACE         # Don't record an entry starting with a space
-setopt HIST_VERIFY               # Don't execute immediately upon history expansion
-setopt INC_APPEND_HISTORY        # Write to the history file immediately, not when the shell exits
-setopt SHARE_HISTORY             # Share history between all sessions
+setopt EXTENDED_HISTORY
+setopt HIST_EXPIRE_DUPS_FIRST
+setopt HIST_IGNORE_DUPS
+setopt HIST_IGNORE_SPACE
+setopt HIST_VERIFY
+setopt INC_APPEND_HISTORY
+setopt SHARE_HISTORY
 
 # ========================================
 # GENERAL ZSH OPTIONS
 # ========================================
-setopt AUTO_CD                   # If you type a directory name, cd into it
-# setopt CORRECT                   # Try to correct command spelling (DISABLED - causes annoying prompts)
-setopt COMPLETE_IN_WORD          # Complete from both ends of a word
-setopt IGNORE_EOF                # Don't exit on EOF
-setopt INTERACTIVE_COMMENTS      # Allow comments in interactive shells
-
-# Disable autocorrection for specific commands that are commonly misidentified
+setopt AUTO_CD
+setopt COMPLETE_IN_WORD
+setopt IGNORE_EOF
+setopt INTERACTIVE_COMMENTS
 unsetopt CORRECT_ALL
 setopt NO_CORRECT
 
 # ========================================
-# SOURCE ADDITIONAL CONFIGS
+# ALIASES / FUNCTIONS
 # ========================================
 [[ -f "$HOME/.zsh_aliases" ]] && source "$HOME/.zsh_aliases"
 [[ -f "$HOME/.zsh_functions" ]] && source "$HOME/.zsh_functions"
-[[ -f "$HOME/.p10k.zsh" ]] && source "$HOME/.p10k.zsh"
 
-# ========================================
-# WARP TERMINAL CONFIGURATION
-# ========================================
-# Set dynamic tab name based on current directory
-function set_warp_tab_name() {
-  echo -ne "\033]0;$(basename "$PWD")\007"
-}
+alias oracle='PATH="/usr/sbin:$PATH" oracle --engine browser'
+alias clawdbot="node ~/d/git/clawdbot/dist/entry.js"
+alias popashot="clawdbot tui --session agent:popashot:main"
 
-if [ -n "$ZSH_VERSION" ]; then
-  precmd_functions+=(set_warp_tab_name)
-elif [ -n "$BASH_VERSION" ]; then
-  PROMPT_COMMAND='set_warp_tab_name'
-fi
-
-# Rust path
-export PATH="$HOME/.cargo/env:$HOME/.cargo/bin:$PATH"
-
-
-# ========================================
-# FINAL SETUP (Must be at the end)
-# ========================================
-# Windsurf
-export PATH="/Users/stevengonsalvez/.codeium/windsurf/bin:$PATH"
-
-eval "$(mise activate zsh)"
-
-# Ready message (only in real interactive terminals with a TTY)
-if [[ -t 1 && -z "$CLAUDE_CODE" && -z "$AGENT_SESSION" ]]; then
-  echo " ✨ Terminal Ready - $(date +%H:%M:%S) ✨"
-fi
-# Amazon Q post block. Keep at the bottom of this file.
-[[ -f "${HOME}/Library/Application Support/amazon-q/shell/zshrc.post.zsh" ]] && builtin source "${HOME}/Library/Application Support/amazon-q/shell/zshrc.post.zsh"
-
-# bun completions
-[ -s "/Users/stevengonsalvez/.bun/_bun" ] && source "/Users/stevengonsalvez/.bun/_bun"
-
-[[ "$TERM_PROGRAM" == "kiro" ]] && . "$(kiro --locate-shell-integration-path zsh)"
+# Tab name = current directory
+autoload -Uz add-zsh-hook
+function set_warp_tab_name() { print -Pn "\e]0;%1~\a" }
+add-zsh-hook precmd set_warp_tab_name
 
 # --WCGW_ENVIRONMENT_START--
 if [ -n "$IN_WCGW_ENVIRONMENT" ]; then
@@ -313,25 +258,17 @@ if [ -n "$IN_WCGW_ENVIRONMENT" ]; then
 fi
 # --WCGW_ENVIRONMENT_END--
 
-# Added by Antigravity
-export PATH="/Users/stevengonsalvez/.antigravity/antigravity/bin:$PATH"
-export PATH="$HOME/.local/bin:$PATH"
+# OTEL config - machine-specific endpoint, resource attrs, Grafana Cloud creds.
+[[ -f "$HOME/.agents-in-a-box/otel/grafana-cloud.env" ]] && source "$HOME/.agents-in-a-box/otel/grafana-cloud.env"
 
-# Add /usr/sbin for system utilities (sysctl, etc.)
-export PATH="/usr/sbin:$PATH"
+[[ -s "$HOME/.bun/_bun" ]] && source "$HOME/.bun/_bun"
+[[ "$TERM_PROGRAM" == "kiro" ]] && . "$(kiro --locate-shell-integration-path zsh)"
 
-# Oracle/ora defaults
-export ORA_ENGINE="browser"
-export ORA_PRIMARY_MODEL="gemini-3-pro"
-export ORA_FALLBACK_MODEL="gpt-5.2-pro"
+# ========================================
+# SYNTAX HIGHLIGHTING / AUTOSUGGESTIONS (must be last)
+# ========================================
+source $ZSH_PLUGINS/zsh-autosuggestions/zsh-autosuggestions.zsh
+source $ZSH_PLUGINS/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
-# Alias oracle to always use browser mode
-alias oracle='PATH="/usr/sbin:$PATH" oracle --engine browser'
-
-# Clawdbot aliases
-alias clawdbot="node ~/d/git/clawdbot/dist/entry.js"
-alias popashot="clawdbot tui --session agent:popashot:main"
-alias popa="clawdbot tui --session agent:main:main"
-
-# Grafana Cloud OTLP creds for local Alloy/OTEL tooling (machine-local file, never committed)
-[ -f "$HOME/.agents-in-a-box/otel/grafana-cloud.env" ] && source "$HOME/.agents-in-a-box/otel/grafana-cloud.env"
+# Amazon Q post block. Keep at the bottom of this file.
+[[ -f "${HOME}/Library/Application Support/amazon-q/shell/zshrc.post.zsh" ]] && builtin source "${HOME}/Library/Application Support/amazon-q/shell/zshrc.post.zsh"
