@@ -28,7 +28,7 @@ httpcore==0.16.3
 httpx==0.23.3
 idna==3.4
 importlib-metadata==6.0.0
-installer==0.6.0
+installer==1.0.1
 jaraco.classes==3.2.3
 Jinja2==3.1.2
 jsonschema==4.17.3
