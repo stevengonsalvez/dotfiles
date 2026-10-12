@@ -1,0 +1,4 @@
+# Historical gitleaks hits present when this gate was added (2026-10-12).
+# Reviewed as test fixtures and placeholders. A new leak is not in this list and fails CI.
+# Remove a line once its value is rotated or the file is gone. Do not add a line to hide a new leak.
+f04b87787460a0985a9cd2a24acdb1db5f78fbdd:executable_dot_bash_profile:generic-api-key:56
